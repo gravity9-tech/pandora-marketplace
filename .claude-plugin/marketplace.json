@@ -1,0 +1,83 @@
+{
+  "version": "1.0.0",
+  "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
+  "items": [
+    {
+      "type": "command",
+      "name": "context-eng:all",
+      "category": "core",
+      "plugin": "context-engineering",
+      "path": "plugins/core/context-engineering/commands/context-eng/all.md"
+    },
+    {
+      "type": "command",
+      "name": "context-eng:architecture",
+      "category": "core",
+      "plugin": "context-engineering",
+      "path": "plugins/core/context-engineering/commands/context-eng/architecture.md"
+    },
+    {
+      "type": "command",
+      "name": "context-eng:coding-guidelines",
+      "category": "core",
+      "plugin": "context-engineering",
+      "path": "plugins/core/context-engineering/commands/context-eng/coding-guidelines.md"
+    },
+    {
+      "type": "command",
+      "name": "deepwiki",
+      "category": "core",
+      "plugin": "deepwiki",
+      "path": "plugins/core/deepwiki/commands/deepwiki.md"
+    },
+    {
+      "type": "agent",
+      "name": "deepwiki-doc-generator",
+      "category": "core",
+      "plugin": "deepwiki",
+      "path": "plugins/core/deepwiki/agents/deepwiki-doc-generator.md"
+    },
+    {
+      "type": "agent",
+      "name": "deepwiki-planner",
+      "category": "core",
+      "plugin": "deepwiki",
+      "path": "plugins/core/deepwiki/agents/deepwiki-planner.md"
+    },
+    {
+      "type": "skill",
+      "name": "generating-ascii-diagrams",
+      "category": "core",
+      "plugin": "deepwiki",
+      "path": "plugins/core/deepwiki/skills/generating-ascii-diagrams/SKILL.md"
+    },
+    {
+      "type": "command",
+      "name": "context-eng:glossary",
+      "category": "core",
+      "plugin": "context-engineering",
+      "path": "plugins/core/context-engineering/commands/context-eng/glossary.md"
+    },
+    {
+      "type": "command",
+      "name": "context-eng:tech-stack",
+      "category": "core",
+      "plugin": "context-engineering",
+      "path": "plugins/core/context-engineering/commands/context-eng/tech-stack.md"
+    },
+    {
+      "type": "command",
+      "name": "add-feature-flag",
+      "category": "integrations",
+      "plugin": "launchdarkly",
+      "path": "plugins/integrations/launchdarkly/commands/add-feature-flag.md"
+    },
+    {
+      "type": "command",
+      "name": "remove-feature-flag",
+      "category": "integrations",
+      "plugin": "launchdarkly",
+      "path": "plugins/integrations/launchdarkly/commands/remove-feature-flag.md"
+    }
+  ]
+}
