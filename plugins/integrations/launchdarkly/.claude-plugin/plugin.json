@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "name": "launchdarkly",
+  "title": "LaunchDarkly Integration",
+  "description": "Integration with LaunchDarkly feature flag management system. Manage feature flags, create flags with automated tests for both variants, and remove flags from your codebase using LaunchDarkly MCP server.",
+  "version": "1.0.0",
+  "author": "Pandora Team",
+  "commands": [
+    {
+      "name": "add-feature-flag",
+      "path": "./commands/add-feature-flag.md",
+      "description": "Add a feature flag to recent code changes - creates flag in LaunchDarkly via MCP, wraps React code, and generates tests for both variants"
+    },
+    {
+      "name": "remove-feature-flag",
+      "path": "./commands/remove-feature-flag.md",
+      "description": "Remove a LaunchDarkly feature flag from the codebase using the MCP server"
+    }
+  ],
+  "mcp_config": "./mcp/mcp.json"
+}

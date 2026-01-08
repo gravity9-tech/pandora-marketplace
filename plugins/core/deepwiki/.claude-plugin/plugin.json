@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "name": "deepwiki",
+  "title": "DeepWiki - Intelligent Documentation Generator",
+  "description": "Comprehensive documentation generation system for codebases. DeepWiki analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
+  "version": "1.0.0",
+  "author": "Pandora Team",
+  "agents": [
+    {
+      "name": "deepwiki-planner",
+      "path": "./agents/deepwiki-planner.md",
+      "description": "Expert codebase analyzer and documentation structure generator. Analyzes code structure and generates a comprehensive documentation sitemap with folder hierarchy, page plans, and navigation rules."
+    },
+    {
+      "name": "deepwiki-doc-generator",
+      "path": "./agents/deepwiki-doc-generator.md",
+      "description": "Documentation content generator for single pages. Generates high-quality, evidence-backed markdown documentation with embedded ASCII diagrams."
+    }
+  ],
+  "commands": [
+    {
+      "name": "deepwiki",
+      "path": "./commands/deepwiki.md",
+      "description": "Generate comprehensive documentation for your codebase using DeepWiki system with evidence-backed content, ASCII diagrams, and automatic cross-references."
+    }
+  ],
+  "skills": [
+    {
+      "name": "deepwiki-ascii-diagrams",
+      "path": "./skills/generating-ascii-diagrams/SKILL.md",
+      "description": "ASCII diagram generation skill for creating professional architectural diagrams in text format. Supports C4 models, sequence diagrams, component diagrams, deployment diagrams, and more."
+    }
+  ]
+}

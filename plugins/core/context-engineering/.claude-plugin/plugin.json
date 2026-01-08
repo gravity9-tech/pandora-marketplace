@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "name": "context-engineering",
+  "title": "Context Engineering",
+  "description": "Comprehensive context engineering toolkit with specialized commands for analyzing and documenting codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
+  "version": "1.0.0",
+  "author": "Pandora Team",
+  "commands": [
+    {
+      "name": "context-eng:all",
+      "path": "./commands/context-eng/all.md",
+      "description": "Generate comprehensive context engineering documentation by running all context-eng commands"
+    },
+    {
+      "name": "context-eng:architecture",
+      "path": "./commands/context-eng/architecture.md",
+      "description": "Analyze and document the system architecture and design patterns of your codebase"
+    },
+    {
+      "name": "context-eng:coding-guidelines",
+      "path": "./commands/context-eng/coding-guidelines.md",
+      "description": "Extract and document coding standards, patterns, and best practices from your codebase"
+    },
+    {
+      "name": "context-eng:glossary",
+      "path": "./commands/context-eng/glossary.md",
+      "description": "Generate a comprehensive glossary of domain-specific terms and terminology used in your project"
+    },
+    {
+      "name": "context-eng:tech-stack",
+      "path": "./commands/context-eng/tech-stack.md",
+      "description": "Document and analyze the technology stack, dependencies, and framework usage in your codebase"
+    }
+  ]
+}

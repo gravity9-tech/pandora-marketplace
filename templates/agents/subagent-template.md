@@ -41,6 +41,13 @@ You are an expert in [domain]. Your role is to help team with [specific tasks].
 - Don't provide untested code without warnings
 - Don't skip explanations
 
+### Required Context
+
+List any markdown context files this agent needs to load:
+- `context/[filename].md` - Brief description of the context this provides
+
+The agent will load these files when necessary during execution.
+
 ## Capabilities
 
 ### Primary Capabilities

@@ -1,83 +1,32 @@
 {
   "version": "1.0.0",
+  "name": "pandora-marketplace",
   "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
-  "items": [
+  "owner": "Pandora Team",
+  "plugins": [
     {
-      "type": "command",
-      "name": "context-eng:all",
+      "name": "context-engineering",
+      "title": "Context Engineering",
+      "description": "Comprehensive context engineering toolkit with commands for analyzing codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
+      "version": "1.0.0",
       "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/all.md"
+      "path": "plugins/core/context-engineering/.claude-plugin/plugin.json"
     },
     {
-      "type": "command",
-      "name": "context-eng:architecture",
-      "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/architecture.md"
-    },
-    {
-      "type": "command",
-      "name": "context-eng:coding-guidelines",
-      "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/coding-guidelines.md"
-    },
-    {
-      "type": "command",
       "name": "deepwiki",
+      "title": "DeepWiki - Intelligent Documentation Generator",
+      "description": "Comprehensive documentation generation system for codebases. Analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
+      "version": "1.0.0",
       "category": "core",
-      "plugin": "deepwiki",
-      "path": "plugins/core/deepwiki/commands/deepwiki.md"
+      "path": "plugins/core/deepwiki/.claude-plugin/plugin.json"
     },
     {
-      "type": "agent",
-      "name": "deepwiki-doc-generator",
-      "category": "core",
-      "plugin": "deepwiki",
-      "path": "plugins/core/deepwiki/agents/deepwiki-doc-generator.md"
-    },
-    {
-      "type": "agent",
-      "name": "deepwiki-planner",
-      "category": "core",
-      "plugin": "deepwiki",
-      "path": "plugins/core/deepwiki/agents/deepwiki-planner.md"
-    },
-    {
-      "type": "skill",
-      "name": "generating-ascii-diagrams",
-      "category": "core",
-      "plugin": "deepwiki",
-      "path": "plugins/core/deepwiki/skills/generating-ascii-diagrams/SKILL.md"
-    },
-    {
-      "type": "command",
-      "name": "context-eng:glossary",
-      "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/glossary.md"
-    },
-    {
-      "type": "command",
-      "name": "context-eng:tech-stack",
-      "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/tech-stack.md"
-    },
-    {
-      "type": "command",
-      "name": "add-feature-flag",
+      "name": "launchdarkly",
+      "title": "LaunchDarkly Integration",
+      "description": "Integration with LaunchDarkly feature flag management system for managing feature flags directly from Claude Code.",
+      "version": "1.0.0",
       "category": "integrations",
-      "plugin": "launchdarkly",
-      "path": "plugins/integrations/launchdarkly/commands/add-feature-flag.md"
-    },
-    {
-      "type": "command",
-      "name": "remove-feature-flag",
-      "category": "integrations",
-      "plugin": "launchdarkly",
-      "path": "plugins/integrations/launchdarkly/commands/remove-feature-flag.md"
+      "path": "plugins/integrations/launchdarkly/.claude-plugin/plugin.json"
     }
   ]
 }
