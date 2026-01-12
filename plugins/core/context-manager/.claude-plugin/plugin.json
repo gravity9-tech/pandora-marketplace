@@ -1,0 +1,9 @@
+{
+  "name": "context-manager",
+  "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Pandora Team"
+  },
+  "commands": "./commands/"
+}

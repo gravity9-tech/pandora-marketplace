@@ -1,32 +1,40 @@
 {
-  "version": "1.0.0",
   "name": "pandora-marketplace",
-  "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
-  "owner": "Pandora Team",
+  "owner": {
+    "name": "Pandora Team"
+  },
+  "metadata": {
+    "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
+    "version": "1.0.0"
+  },
   "plugins": [
     {
       "name": "context-engineering",
-      "title": "Context Engineering",
+      "source": "./plugins/core/context-engineering",
       "description": "Comprehensive context engineering toolkit with commands for analyzing codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
       "version": "1.0.0",
-      "category": "core",
-      "path": "plugins/core/context-engineering/.claude-plugin/plugin.json"
+      "category": "core"
     },
     {
       "name": "deepwiki",
-      "title": "DeepWiki - Intelligent Documentation Generator",
+      "source": "./plugins/core/deepwiki",
       "description": "Comprehensive documentation generation system for codebases. Analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
       "version": "1.0.0",
-      "category": "core",
-      "path": "plugins/core/deepwiki/.claude-plugin/plugin.json"
+      "category": "core"
     },
     {
       "name": "launchdarkly",
-      "title": "LaunchDarkly Integration",
+      "source": "./plugins/integrations/launchdarkly",
       "description": "Integration with LaunchDarkly feature flag management system for managing feature flags directly from Claude Code.",
       "version": "1.0.0",
-      "category": "integrations",
-      "path": "plugins/integrations/launchdarkly/.claude-plugin/plugin.json"
+      "category": "integrations"
+    },
+    {
+      "name": "context-manager",
+      "source": "./plugins/core/context-manager",
+      "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
+      "version": "1.0.0",
+      "category": "core"
     }
   ]
 }
