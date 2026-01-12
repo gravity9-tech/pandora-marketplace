@@ -23,44 +23,55 @@ Initialize team context in a target project by interactively selecting which con
 
 ### Step 2: Present Available Context Domains
 
-Display the available context domains from the marketplace's `team_context/` directory:
+Use the `AskUserQuestion` tool with `multiSelect: true` to let users select which domains to include.
 
+**IMPORTANT**: You MUST use the AskUserQuestion tool with all 3 questions in a SINGLE call. This allows users to see and select from all categories at once:
+
+```json
+{
+  "questions": [
+    {
+      "question": "Select CORE context domains to include:",
+      "header": "Core",
+      "multiSelect": true,
+      "options": [
+        {"label": "architecture", "description": "System design, patterns, component relationships"},
+        {"label": "coding_guidelines", "description": "Best practices, style guides, code review standards"},
+        {"label": "tech_stack", "description": "Framework, library, and tooling documentation"},
+        {"label": "workflows", "description": "Development, deployment, QA, and PR processes"}
+      ]
+    },
+    {
+      "question": "Select PROCESS context domains to include:",
+      "header": "Process",
+      "multiSelect": true,
+      "options": [
+        {"label": "development-env", "description": "Setup guides, troubleshooting, prerequisites"},
+        {"label": "qa-standards", "description": "Testing guidelines and quality standards"},
+        {"label": "security-compliance", "description": "Security guidelines, secrets management"},
+        {"label": "monitoring-observability", "description": "Logging, alerting, monitoring setup"}
+      ]
+    },
+    {
+      "question": "Select REFERENCE context domains to include:",
+      "header": "Reference",
+      "multiSelect": true,
+      "options": [
+        {"label": "business_domain", "description": "Domain knowledge, glossary, user stories"},
+        {"label": "integration", "description": "API standards, integration patterns, third-party services"},
+        {"label": "references", "description": "Quick references and useful links"},
+        {"label": "repositories", "description": "Repository standards and inventory"}
+      ]
+    }
+  ]
+}
 ```
-Available Context Domains
-=========================
 
-Select the domains you want to include in your project:
-
-[ ] architecture       - System design, patterns, component relationships
-[ ] business_domain    - Domain knowledge, glossary, user stories
-[ ] coding_guidelines  - Best practices, style guides, code review standards
-[ ] development-env    - Setup guides, troubleshooting, prerequisites
-[ ] integration        - API standards, integration patterns, third-party services
-[ ] monitoring-observability - Logging, alerting, monitoring setup
-[ ] qa-standards       - Testing guidelines and quality standards
-[ ] references         - Quick references and useful links
-[ ] repositories       - Repository standards and inventory
-[ ] security-compliance - Security guidelines, secrets management
-[ ] tech_stack         - Framework, library, and tooling documentation
-[ ] workflows          - Development, deployment, QA, and PR processes
-
-Options:
-  [A] Select all domains
-  [E] Select essential only (architecture, coding_guidelines, workflows)
-  [C] Custom selection
-```
-
-Use AskUserQuestion to let the user choose:
-- Which domains to include
-- Whether to include all, essential, or custom selection
+Collect all selected domains from all three questions, then proceed to copy them
 
 ### Step 3: Copy Selected Domains
 
-For each selected domain:
-
-1. Create the domain directory in `.claude/context/{domain}/`
-2. Copy all `.md` files from `team_context/{domain}/` to `.claude/context/{domain}/`
-3. Report progress for each domain
+For each selected domain, follow the shared copy logic in `templates/copy-domain.md`.
 
 ### Step 4: Generate INDEX.md
 
