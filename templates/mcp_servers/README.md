@@ -90,11 +90,12 @@ Store credentials securely using environment variables:
 
 | Server | Type | Purpose |
 |--------|------|---------|
-| **Filesystem** | Local | Read/write file system operations |
-| **GitHub** | Remote | Repository management, code review |
-| **Slack** | Remote | Workspace integration, messaging |
-| **Web Search** | Remote | Information retrieval |
-| **Database** | Local/Remote | Database queries and management |
+| **Atlassian** | Remote | Project management, issue tracking (Jira, Confluence) |
+| **Azure DevOps** | Remote | CI/CD pipelines, project management, repositories |
+| **Figma** | Remote | Design collaboration, asset management, prototyping |
+| **GitHub** | Remote | Repository management, code review, CI/CD |
+| **Launch Darkly** | Remote | Feature flag management, deployment control |
+| **Slack** | Remote | Workspace integration, messaging, notifications |
 
 ## Security Best Practices
 

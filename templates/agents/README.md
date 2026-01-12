@@ -8,7 +8,7 @@ Subagents are specialized AI assistants designed to handle specific domains or t
 
 ## Template Structure
 
-The **`subagent-template.md`** provides a standard structure for defining subagents with:
+The **`subagent-template.md`** provides a sample structure for defining subagents with:
 - **Metadata** - Name, description, model, color, and assigned tools/skills
 - **Purpose & Expertise** - Clear definition of what the agent does
 - **Instructions** - Guidelines, do's/don'ts, and required context files
@@ -18,7 +18,7 @@ The **`subagent-template.md`** provides a standard structure for defining subage
 
 ## Example
 
-The **`examples/`** folder contains reference implementations. For instance, **`unit_test_generator.md`** demonstrates a practical subagent that generates unit tests across multiple technologies (JavaScript, Python, Java, Go, etc.) while following team-specific quality standards.
+The **`examples/`** folder contains reference implementations. For instance, **`code_reviewer.md`** demonstrates a practical subagent that helps review code while following team-specific quality standards.
 
 ## Getting Started
 

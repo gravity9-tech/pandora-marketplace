@@ -8,16 +8,20 @@ Hooks are application-level code that execute automatically at specific points t
 
 ## Hook Types
 
-Claude Code supports six distinct hook types, each firing at a specific moment in the session lifecycle:
+Claude Code supports ten distinct hook types, each firing at a specific moment in the session lifecycle:
 
 | Hook | Execution Timing | Purpose |
 |------|-----------------|---------|
 | **SessionStart** | When a Claude Code session initializes | Initialization and setup logic (e.g., load configuration, set environment) |
-| **UserPromptSubmit** | Before Claude processes user input | Validate, augment, or reject user prompts |
+| **UserPromptSubmit** | When the user submits a prompt, before Claude processes it | Validate, augment, or reject user prompts |
 | **PreToolUse** | After Claude selects a tool, before execution | Intercept and control tool execution; approve, deny, or modify planned actions |
-| **PostToolUse** | Immediately after a tool completes | Handle results, side effects, and post-execution logic |
 | **PermissionRequest** | When Claude requests permission to use a tool | Grant or deny access based on custom policies |
+| **PostToolUse** | Immediately after a tool completes | Handle results, side effects, and post-execution logic |
+| **Notification** | When Claude Code sends notifications | Intercept and customize notification behavior |
 | **Stop** | When response generation completes | Cleanup, finalization, and session teardown |
+| **SubagentStop** | When subagent tasks complete | Handle subagent completion and result aggregation |
+| **PreCompact** | Before Claude Code runs a compact operation | Control and manage compact operations |
+| **SessionEnd** | When Claude Code session ends | Final cleanup and session termination logic |
 
 ## Execution Models
 

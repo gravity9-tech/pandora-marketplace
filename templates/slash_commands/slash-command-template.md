@@ -4,7 +4,23 @@ description: Brief description of what the command does
 parameters:
   - name: argument-name
     description: Description of the argument
-    required: true/false
+    type: string | number | boolean | path
+    required: true
+    example: example-value
+    hint: User-friendly hint displayed in CLI
+  - name: optional-argument
+    description: Description of the optional argument
+    type: string
+    required: false
+    default: default-value
+    example: optional-value
+    hint: Optional argument hint
+  - name: flag-option
+    description: Description of a flag option
+    type: boolean
+    required: false
+    example: --option-name
+    hint: Enable specific feature with this flag
 ---
 
 Complete description of what the command does.

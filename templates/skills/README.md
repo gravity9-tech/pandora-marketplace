@@ -1,6 +1,6 @@
 # Skills
 
-This folder contains example reusable Agent Skills for Claude Code.
+This folder contains template and an example of reusable Agent Skills for Claude Code.
 
 ## What are Skills?
 
