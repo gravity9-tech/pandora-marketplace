@@ -27,6 +27,14 @@
       "version": "1.0.0",
       "category": "integrations",
       "path": "plugins/integrations/launchdarkly/.claude-plugin/plugin.json"
+    },
+    {
+      "name": "context-manager",
+      "title": "Context Manager",
+      "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
+      "version": "1.0.0",
+      "category": "core",
+      "path": "plugins/core/context-manager/.claude-plugin/plugin.json"
     }
   ]
 }

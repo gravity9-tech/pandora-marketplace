@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "name": "context-manager",
+  "title": "Context Manager",
+  "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
+  "version": "1.0.0",
+  "author": "Pandora Team",
+  "commands": [
+    {
+      "name": "context:init",
+      "path": "./commands/context/init.md",
+      "description": "Initialize team context in a project by copying selected context domains to .claude/context/"
+    },
+    {
+      "name": "context:list",
+      "path": "./commands/context/list.md",
+      "description": "List available context domains in the marketplace"
+    },
+    {
+      "name": "context:pull",
+      "path": "./commands/context/pull.md",
+      "description": "Pull specific context domains from the marketplace"
+    }
+  ]
+}
