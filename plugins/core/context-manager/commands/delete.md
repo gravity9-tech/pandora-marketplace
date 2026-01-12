@@ -1,5 +1,5 @@
 ---
-allowed-tools: Glob(**/*), Read(**/*), Bash(rm:*), Write(**/*), AskUserQuestion
+allowed-tools: Glob(**/*), Read(**/*), Bash(rm:.claude/context/*), Write(**/*), AskUserQuestion
 argument-hint: <domain> [target-project-path]
 description: Remove a context domain from the project's local .claude/context/ directory
 ---
