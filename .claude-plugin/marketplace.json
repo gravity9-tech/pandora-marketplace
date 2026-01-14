@@ -35,6 +35,13 @@
       "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
       "version": "1.0.0",
       "category": "core"
+    },
+    {
+      "name": "safeguard",
+      "source": "./plugins/core/safeguard",
+      "description": "Defense-in-depth protection system for Claude Code. Blocks dangerous commands and protects sensitive files via PreToolUse hooks. Provides command pattern blocking, path protection levels, and ask patterns for confirmation dialogs.",
+      "version": "1.0.0",
+      "category": "core"
     }
   ]
 }

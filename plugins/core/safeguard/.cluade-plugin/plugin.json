@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "name": "safeguard",
+  "title": "Safeguard - Security Hooks and Damage Control",
+  "description": "Defense-in-depth protection system for Claude Code. Blocks dangerous commands and protects sensitive files via PreToolUse hooks. Provides command pattern blocking, path protection levels, and ask patterns for confirmation dialogs.",
+  "version": "1.0.0",
+  "author": "Pandora Team",
+  "commands": [
+    {
+      "name": "install",
+      "path": "./commands/install.md",
+      "description": "Install the Damage Control security hooks system"
+    }
+  ],
+  "skills": [
+    {
+      "name": "damage-control",
+      "path": "./skills/damage-control/SKILL.md",
+      "description": "Install, configure, and manage the Claude Code Damage Control security hooks system. Use when user mentions damage control, security hooks, protected paths, blocked commands, install security, or modify protection settings."
+    }
+  ]
+}
