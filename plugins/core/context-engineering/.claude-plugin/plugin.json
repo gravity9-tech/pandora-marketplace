@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "Comprehensive context engineering toolkit with specialized commands for analyzing and documenting codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
   "keywords": ["context", "documentation", "architecture", "analysis"],
-  "commands": [
-    "./commands/context-eng/architecture.md", 
-    "./commands/context-eng/tech-stack.md", 
-    "./commands/context-eng/coding-guidelines.md", 
-    "./commands/context-eng/project-glossary.md", 
-    "./commands/context-eng/all.md"
-  ]
+  "commands": "./commands/context-eng/"
 }
+

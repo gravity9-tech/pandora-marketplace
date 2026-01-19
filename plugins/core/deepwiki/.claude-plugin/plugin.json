@@ -3,14 +3,7 @@
   "version": "1.0.0",
   "description": "Comprehensive documentation generation system for codebases. DeepWiki analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
   "keywords": ["documentation", "codebase", "analysis", "diagrams", "wiki"],
-  "agents": [
-    "./agents/deepwiki-planner.md",
-    "./agents/deepwiki-doc-generator.md"
-  ],
-  "commands": [
-    "./commands/deepwiki.md"
-  ],
-  "skills": [
-    "./skills/generating-ascii-diagrams/SKILL.md"
-  ]
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "skills": "./skills/"
 }

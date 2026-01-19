@@ -3,11 +3,5 @@
   "version": "1.0.0",
   "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
   "keywords": ["context", "team", "distribution", "initialization", "templates"],
-  "commands": [
-    "./commands/delete.md",
-    "./commands/init.md",
-    "./commands/list.md",
-    "./commands/pull.md",
-    "./commands/update.md"
-  ]
+  "commands": "./commands/"
 }

@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Integration with LaunchDarkly feature flag management system. Manage feature flags, create flags with automated tests for both variants, and remove flags from your codebase using LaunchDarkly MCP server.",
   "keywords": ["launchdarkly", "feature-flags", "integration", "mcp"],
-  "commands": [
-    "./commands/add-feature-flag.md",
-    "./commands/remove-feature-flag.md"
-  ],
+  "commands": "./commands/",
   "mcpServers": "./mcp/mcp.json"
 }

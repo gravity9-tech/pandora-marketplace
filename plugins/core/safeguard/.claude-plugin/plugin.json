@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "Defense-in-depth protection system for Claude Code. Blocks dangerous commands and protects sensitive files via PreToolUse hooks. Provides command pattern blocking, path protection levels, and ask patterns for confirmation dialogs.",
   "keywords": ["security", "protection", "hooks", "damage-control", "defense"],
-  "commands": [
-    "./commands/install.md"
-  ],
-  "skills": [
-    "./skills/damage-control/SKILL.md"
-  ]
+  "commands": "./commands/",
+  "skills": "./skills/"
 }
