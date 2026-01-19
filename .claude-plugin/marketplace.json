@@ -1,9 +1,11 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "pandora-claudecode-marketplace",
-  "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
+  "name": "pandora-marketplace",
   "owner": {
     "name": "Pandora Team"
+  },
+  "metadata": {
+    "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills for comprehensive development workflows and integrations",
+    "version": "1.0.0"
   },
   "plugins": [
     {
@@ -11,35 +13,102 @@
       "source": "./plugins/core/context-engineering",
       "description": "Comprehensive context engineering toolkit with commands for analyzing codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
       "version": "1.0.0",
-      "category": "core"
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "core",
+      "keywords": ["context", "architecture", "documentation", "codebase"],
+      "commands": [
+        "./commands/context-eng/all.md",
+        "./commands/context-eng/architecture.md",
+        "./commands/context-eng/coding-guidelines.md",
+        "./commands/context-eng/glossary.md",
+        "./commands/context-eng/tech-stack.md"
+      ],
+      "skills": [
+        "./skills/context-injection"
+      ]
     },
     {
       "name": "deepwiki",
       "source": "./plugins/core/deepwiki",
       "description": "Comprehensive documentation generation system for codebases. Analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
       "version": "1.0.0",
-      "category": "core"
-    },
-    {
-      "name": "launchdarkly",
-      "source": "./plugins/integrations/launchdarkly",
-      "description": "Integration with LaunchDarkly feature flag management system for managing feature flags directly from Claude Code.",
-      "version": "1.0.0",
-      "category": "integrations"
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "core",
+      "keywords": ["documentation", "wiki", "code-analysis", "diagrams"],
+      "commands": [
+        "./commands/deepwiki.md"
+      ],
+      "agents": [
+        "./agents/deepwiki-planner.md",
+        "./agents/deepwiki-doc-generator.md"
+      ],
+      "skills": [
+        "./skills/generating-ascii-diagrams"
+      ]
     },
     {
       "name": "context-manager",
       "source": "./plugins/core/context-manager",
       "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
       "version": "1.0.0",
-      "category": "core"
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "core",
+      "keywords": ["context", "team", "templates", "initialization"],
+      "commands": [
+        "./commands/pull.md",
+        "./commands/init.md",
+        "./commands/update.md",
+        "./commands/list.md",
+        "./commands/delete.md"
+      ]
     },
     {
       "name": "safeguard",
       "source": "./plugins/core/safeguard",
       "description": "Defense-in-depth protection system for Claude Code. Blocks dangerous commands and protects sensitive files via PreToolUse hooks. Provides command pattern blocking, path protection levels, and ask patterns for confirmation dialogs.",
       "version": "1.0.0",
-      "category": "core"
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "core",
+      "keywords": ["security", "protection", "safety", "hooks"],
+      "commands": [
+        "./commands/install.md"
+      ],
+      "skills": [
+        "./skills/damage-control"
+      ]
+    },
+    {
+      "name": "launchdarkly",
+      "source": "./plugins/integrations/launchdarkly",
+      "description": "Integration with LaunchDarkly feature flag management system for managing feature flags directly from Claude Code.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "integrations",
+      "keywords": ["feature-flags", "launchdarkly", "integration"],
+      "commands": [
+        "./commands/add-feature-flag.md",
+        "./commands/remove-feature-flag.md"
+      ]
     }
   ]
 }
