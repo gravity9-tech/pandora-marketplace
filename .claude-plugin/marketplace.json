@@ -1,11 +1,9 @@
 {
-  "name": "pandora-marketplace",
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "pandora-claudecode-marketplace",
+  "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
   "owner": {
     "name": "Pandora Team"
-  },
-  "metadata": {
-    "description": "Pandora Marketplace - Collection of Claude Code plugins, agents, commands, and skills",
-    "version": "1.0.0"
   },
   "plugins": [
     {

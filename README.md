@@ -14,6 +14,133 @@ Pandora Marketplace is a structured repository that serves as a foundational tem
 
 This marketplace enables organizations to create a unified, scalable ecosystem for AI-assisted development while maintaining team-specific customizations and standards.
 
+## How To Use This Marketplace
+
+### Step 1: Add the Pandora Marketplace to Claude Code
+
+```bash
+/plugin marketplace add pandora-marketplace
+```
+
+Or add it with a specific repository path:
+
+```bash
+# Add from local directory
+/plugin marketplace add ./pandora_marketplace
+
+# Add from GitHub repository
+/plugin marketplace add owner/pandora_marketplace
+
+# Add from Git URL
+/plugin marketplace add https://github.com/your-org/pandora_marketplace.git
+```
+
+### Step 2: Discover Available Plugins
+
+Once the marketplace is added, you can discover all available plugins:
+
+```bash
+/plugin list
+```
+
+This will show all available plugins in the marketplace, organized by category:
+- **Core Plugins**: Essential tools always recommended
+- **Integration Plugins**: Third-party service integrations
+- **Team Plugins**: Team-specific configurations
+- **Tech Stack Plugins**: Technology-specific tools
+
+### Step 3: Install Plugins
+
+Install any plugin from the marketplace using:
+
+```bash
+/plugin install <plugin-name>@pandora-marketplace
+```
+
+#### Available Plugins
+
+##### Core Plugins
+
+**DeepWiki** - Documentation Generation System
+```bash
+/plugin install deepwiki@pandora-marketplace
+```
+📖 [DeepWiki Usage Guide](./plugins/core/deepwiki/README.md)
+
+**Context Engineering** - Context Analysis & Documentation
+```bash
+/plugin install context-engineering@pandora-marketplace
+```
+📖 [Context Engineering Usage Guide](./plugins/core/context-engineering/README.md)
+
+**Context Manager** - Context Template Distribution
+```bash
+/plugin install context-manager@pandora-marketplace
+```
+📖 [Context Manager Usage Guide](./plugins/core/context-manager/README.md)
+
+**Safeguard** - Code Safety & Protection
+```bash
+/plugin install safeguard@pandora-marketplace
+```
+📖 [Safeguard Usage Guide](./plugins/core/safeguard/README.md)
+
+##### Integration Plugins
+
+**LaunchDarkly** - Feature Flag Management
+```bash
+/plugin install launchdarkly@pandora-marketplace
+```
+📖 [LaunchDarkly Usage Guide](./plugins/integrations/launchdarkly/README.md)
+
+### Step 4: Use the Plugin
+
+After installation, each plugin provides specific commands. Refer to individual plugin README files for detailed usage instructions:
+
+```bash
+# Generate documentation for your codebase
+/deepwiki ./ ./wiki
+
+# Generate comprehensive context documentation
+/context-eng:all ./my-project ./context-docs
+
+# Initialize team context templates
+/context:init ./my-project
+
+# Install security protections
+/install
+
+# Manage feature flags
+/add-feature-flag new-feature-name
+```
+
+### Step 5: Update and Manage Plugins
+
+```bash
+# Update marketplace to latest version
+/plugin marketplace update
+
+# List installed plugins
+/plugin list --installed
+
+# Uninstall a plugin
+/plugin uninstall <plugin-name>@pandora-marketplace
+```
+
+### Quick Reference
+
+| Task | Command |
+|------|---------|
+| Add marketplace | `/plugin marketplace add pandora-marketplace` |
+| List plugins | `/plugin list` |
+| Install plugin | `/plugin install <name>@pandora-marketplace` |
+| Update marketplace | `/plugin marketplace update` |
+| Generate documentation | `/deepwiki ./ ./wiki` |
+| Generate context | `/context-eng:all ./repo ./context` |
+| Initialize context | `/context:init ./project` |
+| Setup security | `/install` |
+| Add feature flag | `/add-feature-flag <flag-name>` |
+
 ## Project Structure
 
 ```
@@ -22,25 +149,33 @@ pandora_marketplace/
 │   └── marketplace.json              # Marketplace configuration and registry
 ├── plugins/                          # All Claude Code plugins and extensions
 │   ├── core/                         # Core plugins (always included)
-│   │   ├── context-engineering/      # Context generation commands
-│   │   └── deepwiki/                 # Documentation generation suite
+│   │   ├── context-engineering/      # Context generation and injection
+│   │   ├── context-manager/          # Context management utilities
+│   │   ├── deepwiki/                 # Documentation generation suite
+│   │   └── safeguard/                # Code safety and damage control
 │   ├── integrations/                 # Third-party integrations
+│   │   ├── atlassian/                # Jira, Confluence integrations
+│   │   ├── azure-devops/             # Azure DevOps integration
+│   │   ├── figma/                    # Figma design integration
 │   │   └── launchdarkly/             # LaunchDarkly feature flags
-│   ├── roles/                        # Role-based plugin collection (for future)
-│   ├── tech-stacks/                  # Technology-specific plugins (for future)
-│   └── pandora/                      # Organization-specific plugins (for future)
-├── team_context/                     # Shared team knowledge and standards
-│   ├── architecture/                 # Architecture patterns and decisions
-│   ├── business_domain/              # Domain knowledge and business rules
-│   ├── coding_guidelines/            # Coding standards and best practices
-│   ├── development-env/              # Environment setup and troubleshooting
-│   ├── integration/                  # API standards and integration patterns
-│   ├── monitoring-observability/     # Logging, metrics, and monitoring
-│   ├── references/                   # Quick references and useful links
-│   ├── repositories/                 # Repository standards and inventory
-│   ├── security-compliance/          # Security and compliance guidelines
-│   ├── tech_stack/                   # Technology inventory and rationale
-│   └── workflows/                    # Team workflows and processes
+│   ├── roles/                        # Role-based plugin collections
+│   │   ├── architect/
+│   │   ├── backend/
+│   │   ├── devops/
+│   │   ├── frontend/
+│   │   ├── platform/
+│   │   └── qa/
+│   ├── tech-stacks/                  # Technology-specific plugins
+│   │   ├── dotnet/
+│   │   ├── java/
+│   │   ├── javascript/               # Including angular, react
+│   │   ├── retail-tech/
+│   │   └── salesforce/
+│   └── pandora/                      # Organization-specific plugins
+│       └── online/                   # Online team configurations
+│           ├── decide-team/          # Team context and plugins
+│           ├── find-team/            # Team context and plugins
+│           └── inspire-team/         # Team context and plugins
 ├── templates/                        # Templates for creating new plugins
 │   ├── agents/                       # Agent creation templates
 │   ├── hooks/                        # Hook implementation templates
@@ -67,6 +202,11 @@ Automated context generation commands for project analysis and documentation:
 - **`/context-eng:tech-stack`** - Identify and document complete technology stack
 - **`/context-eng:all`** - Run all context engineering commands in sequence
 
+#### Context Manager
+Context management and utility tools:
+
+- Context injection and management features for enhanced Claude Code capabilities
+
 #### DeepWiki
 Documentation generation and analysis suite:
 
@@ -75,11 +215,20 @@ Documentation generation and analysis suite:
 - **`deepwiki-planner`** - Agent that plans documentation structure and content
 - **`generating-ascii-diagrams`** - Skill for creating ASCII architecture and flow diagrams
 
-#### LaunchDarkly Integration
-Feature flag management commands:
+#### Safeguard
+Code safety and damage control plugin:
 
-- **`/add-feature-flag`** - Create and configure feature flags
-- **`/remove-feature-flag`** - Manage and remove feature flags
+- Code analysis and safety checks
+- Damage control recovery utilities
+- Language-specific hooks for Python and TypeScript
+
+#### Integrations
+Third-party service integrations:
+
+- **LaunchDarkly** - Feature flag management
+- **Atlassian** - Jira and Confluence integration
+- **Azure DevOps** - Development pipeline and work item management
+- **Figma** - Design file integration
 
 ### 📚 Team Context
 
@@ -216,13 +365,13 @@ Each plugin can contain:
 {
   "version": "1.0.0",
   "description": "Pandora Marketplace catalog",
-  "items": [
+  "plugins": [
     {
-      "type": "command",
-      "name": "glossary",
-      "category": "core",
-      "plugin": "context-engineering",
-      "path": "plugins/core/context-engineering/commands/context-eng/glossary.md"
+      "name": "plugin-name",
+      "source": "path/to/the/plugin",
+      "description": "Sample description of the plugin",
+      "version": "1.0.0",
+      "category": "core"
     }
   ]
 }
@@ -374,10 +523,9 @@ To add new plugins or components to the marketplace:
 
 For help:
 
-1. Check `team_context/development-env/troubleshooting.md`
-2. Review plugin documentation in respective directories
-3. Consult templates for implementation examples
-4. See `team_context/references/useful-links.md` for external resources
+1. Check `[team_context/development-env/troubleshooting.md](https://code.claude.com/docs/en/plugin-marketplaces)`
+2. Check `[https://code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)`
+3. Check `[https://code.claude.com/docs/en/discover-plugins](https://code.claude.com/docs/en/discover-plugins)`
 
 ---
 
