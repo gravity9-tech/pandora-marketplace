@@ -1,0 +1,7 @@
+{
+  "name": "ctx",
+  "version": "1.0.0",
+  "description": "Unified context toolkit for Claude Code. Includes scan commands for analyzing and documenting codebase architecture, tech stack, coding guidelines, and glossaries. Includes sync commands for team context distribution, initialization, and synchronization.",
+  "keywords": ["context", "documentation", "architecture", "analysis", "team", "distribution", "templates"],
+  "commands": "./commands/"
+}

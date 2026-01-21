@@ -9,9 +9,9 @@
   },
   "plugins": [
     {
-      "name": "context-engineering",
-      "source": "./plugins/core/context-engineering",
-      "description": "Comprehensive context engineering toolkit with commands for analyzing codebase architecture, tech stack, coding guidelines, and generating project glossaries.",
+      "name": "ctx",
+      "source": "./plugins/core/ctx",
+      "description": "Unified context toolkit for Claude Code. Includes scan commands for analyzing codebase architecture, tech stack, coding guidelines, and glossaries. Includes sync commands for team context distribution and synchronization.",
       "version": "1.0.0",
       "author": {
         "name": "Pandora Team"
@@ -19,16 +19,18 @@
       "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
       "repository": "https://github.com/gravity9-tech/pandora-marketplace",
       "category": "core",
-      "keywords": ["context", "architecture", "documentation", "codebase"],
+      "keywords": ["context", "architecture", "documentation", "codebase", "team", "distribution", "templates"],
       "commands": [
-        "./commands/context-eng/all.md",
-        "./commands/context-eng/architecture.md",
-        "./commands/context-eng/coding-guidelines.md",
-        "./commands/context-eng/glossary.md",
-        "./commands/context-eng/tech-stack.md"
-      ],
-      "skills": [
-        "./skills/context-injection"
+        "./commands/scan/all.md",
+        "./commands/scan/architecture.md",
+        "./commands/scan/coding-guidelines.md",
+        "./commands/scan/glossary.md",
+        "./commands/scan/tech-stack.md",
+        "./commands/sync/init.md",
+        "./commands/sync/pull.md",
+        "./commands/sync/list.md",
+        "./commands/sync/update.md",
+        "./commands/sync/delete.md"
       ]
     },
     {
@@ -52,26 +54,6 @@
       ],
       "skills": [
         "./skills/generating-ascii-diagrams"
-      ]
-    },
-    {
-      "name": "context-manager",
-      "source": "./plugins/core/context-manager",
-      "description": "Manage team context distribution and initialization. Provides commands for teams to pull, initialize, and update context templates from the marketplace into their projects.",
-      "version": "1.0.0",
-      "author": {
-        "name": "Pandora Team"
-      },
-      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
-      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
-      "category": "core",
-      "keywords": ["context", "team", "templates", "initialization"],
-      "commands": [
-        "./commands/pull.md",
-        "./commands/init.md",
-        "./commands/update.md",
-        "./commands/list.md",
-        "./commands/delete.md"
       ]
     },
     {
