@@ -1,13 +1,13 @@
 ---
-description: Generate comprehensive documentation for your codebase using DeepWiki system with evidence-backed content, ASCII diagrams, and automatic cross-references.
+description: Initialize wiki documentation from codebase with evidence-backed content, ASCII diagrams, and context skills.
 argument-hint: <codebase_path> <wiki_location> [user_context]
-allowed-tools: Agent, Write
+allowed-tools: Agent, Write, Bash, Glob
 model: sonnet
 ---
 
-# DeepWiki Slash Command
+# DeepWiki Init Command
 
-Orchestrates comprehensive documentation generation for a codebase. Manages three phases: structure generation, todo list creation, and iterative page generation with progress tracking.
+Initialize comprehensive wiki documentation from a codebase. Idempotent - does nothing if output already exists.
 
 ## Input Parameters
 
@@ -17,13 +17,30 @@ Orchestrates comprehensive documentation generation for a codebase. Manages thre
 
 ## Workflow
 
+### Phase 0: Idempotency Check
+
+**Check if wiki already exists.** If `{wiki_location}/README.md` exists:
+
+1. Display message:
+   ```
+   Wiki already exists at {wiki_location}/
+
+   To regenerate, either:
+   - Delete the existing wiki: rm -rf {wiki_location}
+   - Specify a different output location
+   ```
+
+2. **Stop execution.** Do not proceed to other phases.
+
+This ensures the command is idempotent - running it multiple times with the same arguments has no effect after the first successful run.
+
 ### Phase 1: Check for Resume or Generate Structure
 
-1. Check if `{wiki_location}/.temp/todo.md` exists with incomplete items for these input parameters
+1. Check if `{wiki_location}/.temp/todo.md` exists with incomplete items
 
 2. If exists with unchecked items:
    - Display: `Resuming from: [N] incomplete pages`
-   - Skip Phases 1-2, jump to Phase 3
+   - Skip to Phase 2
 
 3. If not exists:
    - Call **deepwiki-planner** subagent:
@@ -102,7 +119,38 @@ Orchestrates comprehensive documentation generation for a codebase. Manages thre
 
 8. Continue to next section
 
-### Phase 3: Report Completion
+### Phase 3: Generate Context Skills
+
+After all wiki pages are generated, create Claude Code skills for on-demand context loading.
+
+1. Call **deepwiki-skill-generator** subagent:
+   ```json
+   {
+     "wiki_path": "$2",
+     "skills_output_path": "{home}/.claude/skills"
+   }
+   ```
+
+2. The skill generator will:
+   - Analyze wiki structure (top-level directories)
+   - Generate `{section}` skills for each wiki section
+   - Save skills to user's home directory (`{home}/.claude/skills/`)
+
+3. Display skill generation results:
+   ```
+   ✓ Context skills generated:
+     overview      3 pages
+     architecture  5 pages
+     ...
+   ```
+
+**Why `{home}/.claude/skills/`?**
+- Skills are user-specific, not project files
+- Available across all Claude Code sessions
+- Doesn't pollute the project repository
+- Each developer generates their own from the wiki
+
+### Phase 4: Report Completion
 
 When all items checked:
 
@@ -112,6 +160,9 @@ When all items checked:
   Location: {wiki_location}/
   Structure: {wiki_location}/.temp/documentation_structure.md
   Todo list: {wiki_location}/.temp/todo.md
+
+✓ Context skills generated at {home}/.claude/skills/
+  Claude will auto-load relevant wiki context as you work.
 ```
 
 Resume tips: Run command again to continue from incomplete items.
@@ -143,7 +194,19 @@ Resume tips: Run command again to continue from incomplete items.
 ## Example Usage
 
 ```
-/deepwiki ./ ./wiki
-/deepwiki /path/to/repo /path/to/repo/wiki "Small e-commerce PWA"
-/deepwiki ./myproject ./myproject/docs "Microservices backend"
+/deepwiki:init ./ ./wiki
+/deepwiki:init /path/to/repo /path/to/repo/wiki "Small e-commerce PWA"
+/deepwiki:init ./myproject ./myproject/docs "Microservices backend"
+```
+
+## Idempotency
+
+This command is idempotent:
+- If `{wiki_location}/README.md` exists → does nothing, suggests alternatives
+- If `{wiki_location}/.temp/todo.md` exists with incomplete items → resumes from where it left off
+- If neither exists → starts fresh generation
+
+To force regeneration, delete the existing wiki first:
+```bash
+rm -rf ./wiki && /deepwiki:init ./ ./wiki
 ```
