@@ -172,7 +172,49 @@ Read the following files from `wiki/{section}/` for context:
 - Extract from section description
 - Add common triggers based on section type
 
-### Phase 4: Verify Correct Structure
+### Phase 4: Register Skills in CLAUDE.md
+
+After generating skills, register them in the project's CLAUDE.md for auto-discovery.
+
+1. **Check if CLAUDE.md exists:**
+   ```bash
+   test -f ./CLAUDE.md && echo "exists" || echo "missing"
+   ```
+
+2. **If missing, create CLAUDE.md** with initial content:
+   ```markdown
+   # Project Guidelines
+
+   ## Skills
+
+   The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+
+   | Skill | When to Use |
+   |-------|-------------|
+
+   <!-- Skills are automatically registered by /deepwiki:sync -->
+   ```
+
+3. **If exists but no Skills section**, append the skills section.
+
+4. **For each generated skill**, add to the skills table:
+   ```markdown
+   | {skill_name} | {short_description}. Invoke when {trigger}. |
+   ```
+
+   Insert rows before the `<!-- Skills are automatically registered` comment.
+
+   **CLAUDE.md Descriptions** (concise, under 100 chars):
+   | Pattern | Description |
+   |---------|-------------|
+   | `overview*` | System overview, tech stack, glossary. Invoke when asking about project purpose. |
+   | `architect*` | System architecture and design patterns. Invoke when making architectural decisions. |
+   | `feature*` | Feature documentation. Invoke when working on existing features. |
+   | `develop*` | Development setup and coding standards. Invoke when setting up or following conventions. |
+   | `api*` | API documentation and endpoints. Invoke when working with APIs. |
+   | (other) | {Section} docs. Invoke when working on {section} tasks. |
+
+### Phase 5: Verify Correct Structure
 
 After writing all skills, verify the structure is correct:
 
@@ -182,16 +224,20 @@ ls -la "${HOME}/.claude/skills/"
 
 # Verify each skill has SKILL.md inside a directory
 find "${HOME}/.claude/skills" -name "SKILL.md" -type f
+
+# Verify CLAUDE.md has skills registered
+grep "| overview |" ./CLAUDE.md && echo "✓ Skills registered"
 ```
 
 **Validation checklist:**
 - [ ] Each skill is in its own subdirectory (e.g., `overview/`, `architecture/`)
 - [ ] Each subdirectory contains exactly one `SKILL.md` file
 - [ ] No `.md` files exist directly in `~/.claude/skills/` (only directories)
+- [ ] CLAUDE.md contains skills table with registered skills
 
 If validation fails, fix the structure before reporting success.
 
-### Phase 5: Report Results
+### Phase 6: Report Results
 
 Return structured output:
 
@@ -200,6 +246,7 @@ Return structured output:
   "status": "success",
   "wiki_path": "{wiki_path}",
   "skills_output_path": "{skills_output_path}",
+  "claude_md_updated": true,
   "skills_generated": [
     {
       "name": "overview",
@@ -222,21 +269,24 @@ Print completion message:
 Skills Generated Successfully
 
 Wiki source: {wiki_path}
-Output: {skills_output_path}
+Skills output: {skills_output_path}
+CLAUDE.md: ./CLAUDE.md (updated)
 
-  overview      3 pages
-  architecture  5 pages
-  features      5 pages
-  development   4 pages
-  testing       2 pages
-  deployment    2 pages
+  overview      3 pages  → registered in CLAUDE.md
+  architecture  5 pages  → registered in CLAUDE.md
+  features      5 pages  → registered in CLAUDE.md
+  development   4 pages  → registered in CLAUDE.md
+  testing       2 pages  → registered in CLAUDE.md
+  deployment    2 pages  → registered in CLAUDE.md
 
 Total: 6 skills covering 21 wiki pages
 
-Claude will now automatically load relevant context when:
-- You ask about architecture → architecture skill loads
-- You work on features → features skill loads
-- You ask about testing → testing skill loads
+How skill discovery works:
+1. Claude reads CLAUDE.md at session start (sees skill names & triggers)
+2. When query matches a skill, Claude invokes it via Skill tool
+3. SKILL.md tells Claude which wiki files to read for context
+
+This lazy-load approach keeps context minimal until needed.
 ```
 
 ## What This Agent Does
@@ -245,6 +295,7 @@ Claude will now automatically load relevant context when:
 - Generates optimized skill descriptions for Claude matching
 - Creates `{section}/SKILL.md` directories with proper structure
 - Links to wiki files (no content duplication)
+- **Registers skills in CLAUDE.md for auto-discovery**
 - Verifies correct directory structure before completion
 
 ## What This Agent Does NOT Do
@@ -254,3 +305,14 @@ Claude will now automatically load relevant context when:
 - Create skills for non-wiki content
 - Handle deeply nested wiki structures (top-level sections only)
 - **Create flat `.md` files directly in skills folder** (this breaks discovery)
+
+## How Skill Discovery Works
+
+After this agent completes:
+
+1. **CLAUDE.md** contains a skills table that Claude reads at session start
+2. When a user query matches a skill trigger (e.g., "explain the architecture"), Claude invokes the skill via the Skill tool
+3. The **SKILL.md** file tells Claude which wiki documentation files to read
+4. Claude reads the relevant wiki files and uses them to respond
+
+This lazy-load pattern keeps initial context small (~50 lines in CLAUDE.md) while providing full documentation access when needed.

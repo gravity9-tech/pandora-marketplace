@@ -17,7 +17,7 @@ Initialize comprehensive wiki documentation from a codebase. Idempotent - does n
 
 ## Workflow
 
-### Phase 0: Idempotency Check
+### Phase 0: Idempotency Check and CLAUDE.md Setup
 
 **Check if wiki already exists.** If `{wiki_location}/README.md` exists:
 
@@ -33,6 +33,29 @@ Initialize comprehensive wiki documentation from a codebase. Idempotent - does n
 2. **Stop execution.** Do not proceed to other phases.
 
 This ensures the command is idempotent - running it multiple times with the same arguments has no effect after the first successful run.
+
+**CLAUDE.md Setup:** Before proceeding, ensure CLAUDE.md exists:
+
+```bash
+test -f ./CLAUDE.md && echo "exists" || echo "missing"
+```
+
+If CLAUDE.md is missing, create it with initial content:
+
+```markdown
+# Project Guidelines
+
+## Skills
+
+The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+
+| Skill | When to Use |
+|-------|-------------|
+
+<!-- Skills are automatically registered by /deepwiki:sync -->
+```
+
+If CLAUDE.md exists but has no `## Skills` section, append the skills section to it.
 
 ### Phase 1: Check for Resume or Generate Structure
 
@@ -136,12 +159,24 @@ After all wiki pages are generated, create Claude Code skills for on-demand cont
    - Generate `{section}` skills for each wiki section
    - Save skills to user's home directory (`{home}/.claude/skills/`)
 
-3. Display skill generation results:
+3. **Register each skill in CLAUDE.md:**
+
+   For each generated skill, add a row to the skills table in CLAUDE.md:
+
+   ```markdown
+   | {skill_name} | {skill_description}. Invoke when {trigger_condition}. |
+   ```
+
+   Insert each row before the `<!-- Skills are automatically registered` comment line.
+
+4. Display skill generation results:
    ```
    ✓ Context skills generated:
-     overview      3 pages
-     architecture  5 pages
+     overview      3 pages  → registered in CLAUDE.md
+     architecture  5 pages  → registered in CLAUDE.md
      ...
+
+   CLAUDE.md updated with skill references.
    ```
 
 **Why `{home}/.claude/skills/`?**
@@ -162,7 +197,12 @@ When all items checked:
   Todo list: {wiki_location}/.temp/todo.md
 
 ✓ Context skills generated at {home}/.claude/skills/
-  Claude will auto-load relevant wiki context as you work.
+✓ Skills registered in ./CLAUDE.md
+
+Claude will now auto-discover and load relevant wiki context when you:
+  - Ask about architecture → loads architecture skill → reads wiki/architecture/
+  - Work on features → loads features skill → reads wiki/features/
+  - Ask about setup → loads development skill → reads wiki/development/
 ```
 
 Resume tips: Run command again to continue from incomplete items.

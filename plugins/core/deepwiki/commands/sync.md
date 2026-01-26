@@ -29,6 +29,67 @@ Claude Code ONLY discovers skills in this exact structure:
 - **Argument 1** (`$1` - required): `context_path` - Directory containing markdown documentation
 - **Argument 2** (`$2` - optional): `skill_name` - Custom skill name (only for single-directory mode)
 
+---
+
+## Phase 0: CLAUDE.md Check
+
+Before syncing skills, ensure CLAUDE.md exists so skills are discoverable.
+
+### Check for CLAUDE.md
+
+```bash
+test -f ./CLAUDE.md && echo "exists" || echo "missing"
+```
+
+### If CLAUDE.md is missing
+
+Display warning and create initial CLAUDE.md:
+
+```
+⚠ CLAUDE.md not found in project root.
+
+Creating CLAUDE.md with skills section...
+```
+
+Create `./CLAUDE.md` with initial content:
+
+```markdown
+# Project Guidelines
+
+## Skills
+
+The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+
+| Skill | When to Use |
+|-------|-------------|
+
+<!-- Skills are automatically registered by /deepwiki:sync -->
+```
+
+### If CLAUDE.md exists but has no Skills section
+
+Check if CLAUDE.md contains a `## Skills` section:
+
+```bash
+grep -q "## Skills" ./CLAUDE.md && echo "has_skills" || echo "no_skills"
+```
+
+If no Skills section exists, append it to CLAUDE.md:
+
+```markdown
+
+## Skills
+
+The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+
+| Skill | When to Use |
+|-------|-------------|
+
+<!-- Skills are automatically registered by /deepwiki:sync -->
+```
+
+---
+
 ## Behavior
 
 ### Mode Detection
@@ -59,16 +120,19 @@ When `{context_path}` has subdirectories (e.g., `./wiki/` with `overview/`, `arc
 
 3. **Generate SKILL.md** for each section using the template below
 
-4. **Display results:**
+4. **Register each skill in CLAUDE.md** (see Phase 2)
+
+5. **Display results:**
    ```
    ✓ Skills synced from {context_path}
 
-     overview       3 files
-     architecture   5 files
-     features       5 files
+     overview       3 files  → registered in CLAUDE.md
+     architecture   5 files  → registered in CLAUDE.md
+     features       5 files  → registered in CLAUDE.md
      ...
 
-   Location: {home}/.claude/skills/
+   Skills location: {home}/.claude/skills/
+   CLAUDE.md updated: ./CLAUDE.md
    ```
 
 ---
@@ -88,13 +152,16 @@ When `{context_path}` has no subdirectories (e.g., `./wiki/my-custom-context/`):
 
 3. **Generate single SKILL.md** at `{home}/.claude/skills/{name}/SKILL.md`
 
-4. **Display results:**
+4. **Register skill in CLAUDE.md** (see Phase 2)
+
+5. **Display results:**
    ```
    ✓ Skill synced from {context_path}
 
-     {name}   {N} files
+     {name}   {N} files  → registered in CLAUDE.md
 
-   Location: {home}/.claude/skills/{name}/
+   Skill location: {home}/.claude/skills/{name}/
+   CLAUDE.md updated: ./CLAUDE.md
    ```
 
 ---
@@ -168,6 +235,72 @@ Based on section type, generate 3-5 relevant trigger scenarios.
 
 ---
 
+## Phase 2: Register Skills in CLAUDE.md
+
+After generating each skill, register it in CLAUDE.md so Claude auto-discovers it.
+
+### For Each Skill Generated
+
+1. **Read current CLAUDE.md content**
+
+2. **Check if skill already registered:**
+   ```bash
+   grep -q "| ${skill_name} |" ./CLAUDE.md && echo "registered" || echo "not_registered"
+   ```
+
+3. **If not registered, add to skills table:**
+
+   Find the line containing `<!-- Skills are automatically registered` and insert the skill row before it:
+
+   ```markdown
+   | {skill_name} | {skill_description} |
+   ```
+
+   Example skill rows:
+   ```markdown
+   | overview | System overview, tech stack, glossary. Invoke when asking about project purpose or technologies. |
+   | architecture | System architecture and design patterns. Invoke when making architectural decisions. |
+   | features | Feature documentation. Invoke when working on or understanding existing features. |
+   | development | Development setup and coding standards. Invoke when setting up environment or following conventions. |
+   | api | API documentation and endpoints. Invoke when working with APIs. |
+   ```
+
+4. **If skill already registered, update the description** (in case it changed)
+
+### CLAUDE.md Skills Table Format
+
+The skills table in CLAUDE.md should look like:
+
+```markdown
+## Skills
+
+The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+
+| Skill | When to Use |
+|-------|-------------|
+| overview | System overview, tech stack, glossary. Invoke when asking about project purpose or technologies. |
+| architecture | System architecture and design patterns. Invoke when making architectural decisions. |
+| features | Feature documentation. Invoke when working on or understanding existing features. |
+<!-- Skills are automatically registered by /deepwiki:sync -->
+```
+
+### Skill Description for CLAUDE.md
+
+Generate a concise "When to Use" description (under 100 chars):
+
+| Pattern | CLAUDE.md Description |
+|---------|----------------------|
+| `overview*` | System overview, tech stack, glossary. Invoke when asking about project purpose or technologies. |
+| `architect*` | System architecture and design patterns. Invoke when making architectural decisions. |
+| `feature*` | Feature documentation. Invoke when working on or understanding existing features. |
+| `develop*` | Development setup and coding standards. Invoke when setting up environment or following conventions. |
+| `test*` | Testing strategy. Invoke when writing or running tests. |
+| `deploy*` | Deployment and environments. Invoke when building or deploying. |
+| `api*` | API documentation and endpoints. Invoke when working with APIs. |
+| (other) | {Section name} docs. Invoke when working on {section name} tasks. |
+
+---
+
 ## Example Usage
 
 ```bash
@@ -197,6 +330,8 @@ Based on section type, generate 3-5 relevant trigger scenarios.
 - Running again overwrites existing skills with same names
 - Excludes `.temp/` directories
 - Only processes `.md` files
+- CLAUDE.md is created if missing, or updated if it exists
+- Skills are registered in CLAUDE.md for auto-discovery
 
 ## Verification
 
@@ -208,6 +343,22 @@ ls -la ~/.claude/skills/
 
 # Should list SKILL.md files inside subdirectories
 find ~/.claude/skills -name "SKILL.md" -type f
+
+# Verify CLAUDE.md has skills registered
+grep "| overview |" ./CLAUDE.md && echo "✓ Skills registered in CLAUDE.md"
 ```
 
 If you see `.md` files directly in `~/.claude/skills/` (not inside subdirectories), the structure is wrong and skills will not be discovered.
+
+## How Skill Discovery Works
+
+After sync completes, Claude discovers skills through two mechanisms:
+
+1. **CLAUDE.md Skills Table**: Claude reads CLAUDE.md at session start and sees the skills table, which tells it which skills exist and when to use them.
+
+2. **Lazy Loading**: When Claude identifies a matching query (e.g., "explain the architecture"), it invokes the skill using the Skill tool. The skill's SKILL.md tells Claude which documentation files to read.
+
+This two-step approach keeps context minimal until needed:
+- CLAUDE.md: ~50 lines (just skill names and triggers)
+- SKILL.md: Loaded on-demand with file references
+- Wiki docs: Read only when the skill is invoked
