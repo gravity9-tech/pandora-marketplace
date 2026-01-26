@@ -31,42 +31,40 @@ Claude Code ONLY discovers skills in this exact structure:
 
 ---
 
-## Phase 0: CLAUDE.md Check
+## Phase 0: CLAUDE.md Setup and Skill Discovery
 
-Before syncing skills, ensure CLAUDE.md exists so skills are discoverable.
+Before syncing new skills, ensure CLAUDE.md exists and register ALL existing skills.
 
-### Check for CLAUDE.md
+### Step 1: Check for CLAUDE.md
 
 ```bash
 test -f ./CLAUDE.md && echo "exists" || echo "missing"
 ```
 
-### If CLAUDE.md is missing
+### Step 2: If CLAUDE.md is missing, run /init to create it
 
-Display warning and create initial CLAUDE.md:
+Display message and run the built-in `/init` command:
 
 ```
 ⚠ CLAUDE.md not found in project root.
 
-Creating CLAUDE.md with skills section...
+Running /init to generate CLAUDE.md...
 ```
 
-Create `./CLAUDE.md` with initial content:
+**Run the `/init` command** using the Skill tool:
 
-```markdown
-# Project Guidelines
-
-## Skills
-
-The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
-
-| Skill | When to Use |
-|-------|-------------|
-
-<!-- Skills are automatically registered by /deepwiki:sync -->
+```
+Skill: init
 ```
 
-### If CLAUDE.md exists but has no Skills section
+This will:
+- Analyze the project structure
+- Read package files, configs, and existing documentation
+- Generate a proper CLAUDE.md with build commands, test instructions, coding conventions, etc.
+
+**Wait for /init to complete** before proceeding to Step 3.
+
+### Step 3: If CLAUDE.md exists but has no Skills section
 
 Check if CLAUDE.md contains a `## Skills` section:
 
@@ -74,23 +72,58 @@ Check if CLAUDE.md contains a `## Skills` section:
 grep -q "## Skills" ./CLAUDE.md && echo "has_skills" || echo "no_skills"
 ```
 
-If no Skills section exists, append it to CLAUDE.md:
+If no Skills section exists, append it to CLAUDE.md.
 
-```markdown
+### Step 4: Discover ALL existing skills in ~/.claude/skills/
 
-## Skills
+Scan for all existing skills regardless of whether they were created by this sync:
 
-The following context skills are available. When a query matches a skill's purpose, invoke it using the Skill tool to load relevant documentation before responding.
+```bash
+find "${HOME}/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort
+```
 
-| Skill | When to Use |
-|-------|-------------|
+### Step 5: For each discovered skill, extract description and register
 
-<!-- Skills are automatically registered by /deepwiki:sync -->
+For each skill directory found:
+
+1. **Read the SKILL.md file:**
+   ```bash
+   cat "${HOME}/.claude/skills/{skill_name}/SKILL.md"
+   ```
+
+2. **Extract the description** from YAML front matter:
+   - Parse the `description:` field from the `---` delimited front matter
+   - This contains the skill's trigger conditions
+
+3. **Check if already registered in CLAUDE.md:**
+   ```bash
+   grep -q "| {skill_name} |" ./CLAUDE.md && echo "registered" || echo "not_registered"
+   ```
+
+4. **If not registered, add to skills table:**
+   - Insert row before `<!-- Skills are automatically registered` comment
+   - Format: `| {skill_name} | {description} |`
+
+5. **If already registered, verify description is current** (update if changed)
+
+### Step 6: Display discovered skills
+
+```
+✓ CLAUDE.md ready
+
+Existing skills discovered:
+  overview       → registered
+  architecture   → registered
+  features       → registered
+  api            → registered
+  development    → already registered
+
+Proceeding with sync...
 ```
 
 ---
 
-## Behavior
+## Phase 1: Sync Requested Content
 
 ### Mode Detection
 
@@ -120,7 +153,7 @@ When `{context_path}` has subdirectories (e.g., `./wiki/` with `overview/`, `arc
 
 3. **Generate SKILL.md** for each section using the template below
 
-4. **Register each skill in CLAUDE.md** (see Phase 2)
+4. **Register each skill in CLAUDE.md** (see Skill Registration Reference)
 
 5. **Display results:**
    ```
@@ -152,7 +185,7 @@ When `{context_path}` has no subdirectories (e.g., `./wiki/my-custom-context/`):
 
 3. **Generate single SKILL.md** at `{home}/.claude/skills/{name}/SKILL.md`
 
-4. **Register skill in CLAUDE.md** (see Phase 2)
+4. **Register skill in CLAUDE.md** (see Skill Registration Reference)
 
 5. **Display results:**
    ```
@@ -235,11 +268,11 @@ Based on section type, generate 3-5 relevant trigger scenarios.
 
 ---
 
-## Phase 2: Register Skills in CLAUDE.md
+## Skill Registration (Reference)
 
-After generating each skill, register it in CLAUDE.md so Claude auto-discovers it.
+This section documents how to register skills in CLAUDE.md. Used by both Phase 0 (existing skills) and Phase 1 (newly synced skills).
 
-### For Each Skill Generated
+### For Each Skill
 
 1. **Read current CLAUDE.md content**
 

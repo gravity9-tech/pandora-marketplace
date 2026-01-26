@@ -40,10 +40,26 @@ This ensures the command is idempotent - running it multiple times with the same
 test -f ./CLAUDE.md && echo "exists" || echo "missing"
 ```
 
-If CLAUDE.md is missing, create it with initial content:
+If CLAUDE.md is missing, **run `/init` to create it**:
+
+```
+⚠ CLAUDE.md not found in project root.
+
+Running /init to generate CLAUDE.md...
+```
+
+Use the Skill tool to invoke `/init`:
+```
+Skill: init
+```
+
+This will analyze the project and generate a proper CLAUDE.md with build commands, test instructions, and coding conventions.
+
+**Wait for /init to complete** before proceeding.
+
+If CLAUDE.md exists but has no `## Skills` section, append the skills section to it:
 
 ```markdown
-# Project Guidelines
 
 ## Skills
 
@@ -54,8 +70,6 @@ The following context skills are available. When a query matches a skill's purpo
 
 <!-- Skills are automatically registered by /deepwiki:sync -->
 ```
-
-If CLAUDE.md exists but has no `## Skills` section, append the skills section to it.
 
 ### Phase 1: Check for Resume or Generate Structure
 
