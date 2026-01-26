@@ -46,14 +46,22 @@
       "category": "core",
       "keywords": ["documentation", "wiki", "code-analysis", "diagrams"],
       "commands": [
-        "./commands/deepwiki.md"
+        "./commands/init.md",
+        "./commands/sync.md"
       ],
       "agents": [
         "./agents/deepwiki-planner.md",
-        "./agents/deepwiki-doc-generator.md"
+        "./agents/deepwiki-doc-generator.md",
+        "./agents/deepwiki-skill-generator.md"
       ],
       "skills": [
-        "./skills/generating-ascii-diagrams"
+        "./skills/codebase-analysis-patterns",
+        "./skills/doc-generator-output-templates",
+        "./skills/documentation-quality-checklist",
+        "./skills/documentation-structure-patterns",
+        "./skills/evidence-citation",
+        "./skills/generating-ascii-diagrams",
+        "./skills/planner-output-templates"
       ]
     },
     {
