@@ -9,6 +9,21 @@ model: haiku
 
 Sync documentation to Claude Code skills. Use this to regenerate skills after manually enriching wiki content, or to create skills from any markdown directory structure.
 
+## CRITICAL: Skill Directory Structure
+
+Claude Code ONLY discovers skills in this exact structure:
+
+```
+~/.claude/skills/{skill-name}/SKILL.md   ✓ CORRECT - will be discovered
+~/.claude/skills/{skill-name}.md         ✗ WRONG - will NOT be discovered
+```
+
+**You MUST create a subdirectory for each skill.** Always use:
+1. `mkdir -p ~/.claude/skills/{skill-name}/`
+2. Write to `~/.claude/skills/{skill-name}/SKILL.md`
+
+**NEVER create flat `.md` files directly in `~/.claude/skills/`.**
+
 ## Input Parameters
 
 - **Argument 1** (`$1` - required): `context_path` - Directory containing markdown documentation
@@ -178,7 +193,21 @@ Based on section type, generate 3-5 relevant trigger scenarios.
 
 ## Notes
 
-- Skills are always written to `{home}/.claude/skills/` (user home, not project)
+- Skills are always written to `{home}/.claude/skills/{name}/SKILL.md` (subdirectory required)
 - Running again overwrites existing skills with same names
 - Excludes `.temp/` directories
 - Only processes `.md` files
+
+## Verification
+
+After writing skills, verify the structure is correct:
+
+```bash
+# Should show directories, NOT .md files
+ls -la ~/.claude/skills/
+
+# Should list SKILL.md files inside subdirectories
+find ~/.claude/skills -name "SKILL.md" -type f
+```
+
+If you see `.md` files directly in `~/.claude/skills/` (not inside subdirectories), the structure is wrong and skills will not be discovered.
