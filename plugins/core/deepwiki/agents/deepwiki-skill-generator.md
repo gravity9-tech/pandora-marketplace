@@ -10,6 +10,28 @@ skills: []
 
 Generate Claude Code skills that enable on-demand context loading from wiki documentation.
 
+## CRITICAL: Skill Directory Structure
+
+Claude Code ONLY discovers skills in this exact structure:
+
+```
+~/.claude/skills/{skill-name}/SKILL.md   ✓ CORRECT - will be discovered
+~/.claude/skills/{skill-name}.md         ✗ WRONG - will NOT be discovered
+```
+
+**You MUST create a subdirectory for each skill.** The file MUST be named `SKILL.md` inside that directory.
+
+Example for a wiki with `overview/` and `architecture/` sections:
+```
+~/.claude/skills/
+├── overview/
+│   └── SKILL.md        ← Created by this agent
+├── architecture/
+│   └── SKILL.md        ← Created by this agent
+```
+
+**NEVER create flat `.md` files directly in `~/.claude/skills/`.**
+
 ## Single Responsibility
 
 Analyze wiki structure and generate corresponding Claude Code skills. Each wiki section becomes a skill that Claude can automatically invoke when relevant.
@@ -93,7 +115,13 @@ For unmatched sections, generate from folder name:
 {Folder name} documentation. Use when working on {folder name} related tasks.
 ```
 
-### Phase 3: Generate SKILL.md Files
+### Phase 3: Create Directories and Generate SKILL.md Files
+
+**IMPORTANT:** For each section, you must:
+1. First create the directory: `mkdir -p {skills_output_path}/{section}/`
+2. Then write the file to: `{skills_output_path}/{section}/SKILL.md`
+
+**The file MUST be named exactly `SKILL.md` inside a subdirectory. Do NOT create `{section}.md` directly in skills folder.**
 
 For each section, write to `{skills_output_path}/{section}/SKILL.md`:
 
@@ -144,21 +172,24 @@ Read the following files from `wiki/{section}/` for context:
 - Extract from section description
 - Add common triggers based on section type
 
-### Phase 4: Create Directory Structure
+### Phase 4: Verify Correct Structure
 
-Resolve `{home}` to the actual home directory path, then create skill directories:
+After writing all skills, verify the structure is correct:
 
 ```bash
-# Resolve home directory (cross-platform)
-# Unix/Mac: $HOME
-# Windows: %USERPROFILE%
-SKILLS_PATH="${HOME}/.claude/skills"
+# List all created skill directories
+ls -la "${HOME}/.claude/skills/"
 
-# Create skill directory
-mkdir -p "${SKILLS_PATH}/{section}"
+# Verify each skill has SKILL.md inside a directory
+find "${HOME}/.claude/skills" -name "SKILL.md" -type f
 ```
 
-**Important:** Always resolve `{home}` to the platform-appropriate home directory before creating directories or writing files.
+**Validation checklist:**
+- [ ] Each skill is in its own subdirectory (e.g., `overview/`, `architecture/`)
+- [ ] Each subdirectory contains exactly one `SKILL.md` file
+- [ ] No `.md` files exist directly in `~/.claude/skills/` (only directories)
+
+If validation fails, fix the structure before reporting success.
 
 ### Phase 5: Report Results
 
@@ -212,8 +243,9 @@ Claude will now automatically load relevant context when:
 
 - Reads wiki structure and extracts section information
 - Generates optimized skill descriptions for Claude matching
-- Creates SKILL.md files with proper frontmatter
+- Creates `{section}/SKILL.md` directories with proper structure
 - Links to wiki files (no content duplication)
+- Verifies correct directory structure before completion
 
 ## What This Agent Does NOT Do
 
@@ -221,3 +253,4 @@ Claude will now automatically load relevant context when:
 - Modify existing wiki files
 - Create skills for non-wiki content
 - Handle deeply nested wiki structures (top-level sections only)
+- **Create flat `.md` files directly in skills folder** (this breaks discovery)
