@@ -47,7 +47,6 @@ This will show all available plugins in the marketplace, organized by category:
 - **Core Plugins**: Essential tools always recommended
 - **Integration Plugins**: Third-party service integrations
 - **Team Plugins**: Team-specific configurations
-- **Tech Stack Plugins**: Technology-specific tools
 
 ### Step 3: Install Plugins
 
@@ -66,18 +65,6 @@ Install any plugin from the marketplace using:
 /plugin install deepwiki@pandora-marketplace
 ```
 📖 [DeepWiki Usage Guide](./plugins/core/deepwiki/README.md)
-
-**Context Engineering** - Context Analysis & Documentation
-```bash
-/plugin install context-engineering@pandora-marketplace
-```
-📖 [Context Engineering Usage Guide](./plugins/core/context-engineering/README.md)
-
-**Context Manager** - Context Template Distribution
-```bash
-/plugin install context-manager@pandora-marketplace
-```
-📖 [Context Manager Usage Guide](./plugins/core/context-manager/README.md)
 
 **Safeguard** - Code Safety & Protection
 ```bash
@@ -98,14 +85,11 @@ Install any plugin from the marketplace using:
 After installation, each plugin provides specific commands. Refer to individual plugin README files for detailed usage instructions:
 
 ```bash
-# Generate documentation for your codebase
-/deepwiki ./ ./wiki
+# Initialize wiki documentation from your codebase
+/deepwiki:init ./ ./wiki
 
-# Generate comprehensive context documentation
-/context-eng:all ./my-project ./context-docs
-
-# Initialize team context templates
-/context:init ./my-project
+# Sync wiki to Claude Code skills (after manual edits)
+/deepwiki:sync ./wiki
 
 # Install security protections
 /install
@@ -135,9 +119,8 @@ After installation, each plugin provides specific commands. Refer to individual 
 | List plugins | `/plugin list` |
 | Install plugin | `/plugin install <name>@pandora-marketplace` |
 | Update marketplace | `/plugin marketplace update` |
-| Generate documentation | `/deepwiki ./ ./wiki` |
-| Generate context | `/context-eng:all ./repo ./context` |
-| Initialize context | `/context:init ./project` |
+| Initialize wiki documentation | `/deepwiki:init ./ ./wiki` |
+| Sync wiki to skills | `/deepwiki:sync ./wiki` |
 | Setup security | `/install` |
 | Add feature flag | `/add-feature-flag <flag-name>` |
 
@@ -145,32 +128,23 @@ After installation, each plugin provides specific commands. Refer to individual 
 
 ```
 pandora_marketplace/
+├── .claude/
+│   └── settings.json                 # Claude Code settings
 ├── .claude-plugin/
 │   └── marketplace.json              # Marketplace configuration and registry
 ├── plugins/                          # All Claude Code plugins and extensions
 │   ├── core/                         # Core plugins (always included)
-│   │   ├── context-engineering/      # Context generation and injection
-│   │   ├── context-manager/          # Context management utilities
 │   │   ├── deepwiki/                 # Documentation generation suite
+│   │   │   ├── agents/               # Planner, doc-generator, skill-generator
+│   │   │   ├── commands/             # init.md, sync.md
+│   │   │   └── skills/               # ASCII diagrams, templates, patterns
 │   │   └── safeguard/                # Code safety and damage control
+│   │       ├── commands/             # install.md
+│   │       └── skills/               # Damage control hooks and cookbooks
 │   ├── integrations/                 # Third-party integrations
-│   │   ├── atlassian/                # Jira, Confluence integrations
-│   │   ├── azure-devops/             # Azure DevOps integration
-│   │   ├── figma/                    # Figma design integration
 │   │   └── launchdarkly/             # LaunchDarkly feature flags
-│   ├── roles/                        # Role-based plugin collections
-│   │   ├── architect/
-│   │   ├── backend/
-│   │   ├── devops/
-│   │   ├── frontend/
-│   │   ├── platform/
-│   │   └── qa/
-│   ├── tech-stacks/                  # Technology-specific plugins
-│   │   ├── dotnet/
-│   │   ├── java/
-│   │   ├── javascript/               # Including angular, react
-│   │   ├── retail-tech/
-│   │   └── salesforce/
+│   │       ├── commands/             # add-feature-flag.md, remove-feature-flag.md
+│   │       └── mcp/                  # MCP server configuration
 │   └── pandora/                      # Organization-specific plugins
 │       └── online/                   # Online team configurations
 │           ├── decide-team/          # Team context and plugins
@@ -183,8 +157,6 @@ pandora_marketplace/
 │   ├── skills/                       # Skill creation templates
 │   ├── slash_commands/               # Slash command templates
 │   └── workflows/                    # Workflow templates
-├── .claude/
-│   └── settings.json                 # Claude Code settings
 ├── .gitignore                        # Git ignore rules
 └── README.md                         # This file
 ```
@@ -193,27 +165,14 @@ pandora_marketplace/
 
 ### 🔌 Plugins
 
-#### Context Engineering
-Automated context generation commands for project analysis and documentation:
-
-- **`/context-eng:glossary`** - Extract domain-specific terms and build a comprehensive glossary
-- **`/context-eng:architecture`** - Analyze system architecture and generate detailed design documentation
-- **`/context-eng:coding-guidelines`** - Detect technologies and generate tailored coding guidelines
-- **`/context-eng:tech-stack`** - Identify and document complete technology stack
-- **`/context-eng:all`** - Run all context engineering commands in sequence
-
-#### Context Manager
-Context management and utility tools:
-
-- Context injection and management features for enhanced Claude Code capabilities
-
 #### DeepWiki
-Documentation generation and analysis suite:
+Documentation generation suite with on-demand context loading:
 
-- **`/deepwiki`** - Main command for wiki-style documentation generation
-- **`deepwiki-doc-generator`** - Agent that generates documentation from codebase analysis
-- **`deepwiki-planner`** - Agent that plans documentation structure and content
-- **`generating-ascii-diagrams`** - Skill for creating ASCII architecture and flow diagrams
+- **`/deepwiki:init`** - Initialize wiki documentation from codebase with ASCII diagrams and cross-references
+- **`/deepwiki:sync`** - Sync documentation to Claude Code skills for automatic context loading
+- **`deepwiki-planner`** - Agent that analyzes codebase and generates documentation structure
+- **`deepwiki-doc-generator`** - Agent that generates individual wiki pages with diagrams
+- **`deepwiki-skill-generator`** - Agent that creates Claude Code skills from wiki
 
 #### Safeguard
 Code safety and damage control plugin:
@@ -226,23 +185,6 @@ Code safety and damage control plugin:
 Third-party service integrations:
 
 - **LaunchDarkly** - Feature flag management
-- **Atlassian** - Jira and Confluence integration
-- **Azure DevOps** - Development pipeline and work item management
-- **Figma** - Design file integration
-
-### 📚 Team Context
-
-Structured documentation templates for shared team knowledge:
-
-- **Architecture**: Design patterns, system architecture, component relationships
-- **Business Domain**: Glossary, user stories, domain knowledge
-- **Coding Guidelines**: Best practices, style guides, code review checklists
-- **Development Environment**: Setup guides, troubleshooting, prerequisites
-- **Integration**: API standards, integration patterns, third-party services
-- **Monitoring & Observability**: Logging standards, alerting, monitoring setup
-- **Security & Compliance**: Security guidelines, secrets management
-- **Tech Stack**: Frameworks, libraries, tooling documentation
-- **Workflows**: Development, deployment, QA, and PR processes
 
 ### 🛠️ Templates
 
@@ -272,16 +214,16 @@ The marketplace is automatically registered via `.claude-plugin/marketplace.json
 - Load marketplace configuration
 - Make all commands, agents, and skills available
 
-### 3. Customize Team Context
+### 3. Generate Documentation
 
-Update the files in `team_context/` to reflect your organization:
+Use DeepWiki to generate documentation from your codebase:
 
 ```bash
-team_context/
-├── coding_guidelines/   # Your coding standards
-├── architecture/        # Your system architecture
-├── workflows/          # Your team processes
-└── tech_stack/         # Your technology choices
+# Initialize wiki documentation
+/deepwiki:init ./ ./wiki
+
+# Sync to Claude Code skills for on-demand context
+/deepwiki:sync ./wiki
 ```
 
 ### 4. Explore Available Commands
@@ -289,13 +231,14 @@ team_context/
 Once registered, use Claude Code to access marketplace features:
 
 ```bash
-# Generate complete project context
-/context-eng:all /path/to/your/repo ./generated-context
+# Initialize wiki documentation from your codebase
+/deepwiki:init /path/to/your/repo ./wiki
 
-# Or run individual commands:
-/context-eng:glossary /path/to/your/repo ./glossary.md
-/context-eng:architecture /path/to/your/repo ./architecture
-/deepwiki /path/to/your/repo
+# Sync wiki to Claude Code skills (after manual edits)
+/deepwiki:sync ./wiki
+
+# Sync custom documentation as a skill
+/deepwiki:sync ./docs/team-conventions conventions
 ```
 
 ## Plugin Development
@@ -342,8 +285,6 @@ Plugins are organized by category:
 plugins/
 ├── core/              # Essential plugins included by default
 ├── integrations/      # Third-party service integrations
-├── roles/            # Role-specific plugin collections (PM, Backend, Frontend, etc.)
-├── tech-stacks/      # Technology-specific plugins (Java, .NET, JavaScript, etc.)
 └── pandora/          # Organization-specific plugins and customizations
 ```
 
@@ -379,55 +320,56 @@ Each plugin can contain:
 
 ## Usage Examples
 
-### Generate Complete Context for Your Codebase
+### Generate Wiki Documentation for Your Codebase
 
 ```bash
-# Run all context engineering commands
-/context-eng:all /path/to/your/project ./project-context
+# Initialize wiki from your project
+/deepwiki:init /path/to/your/project ./wiki
 
-# Result: Complete documentation in project-context/
-# ├── glossary/        - Domain terminology
-# ├── architecture/    - System design
-# ├── guidelines/      - Coding standards
-# └── tech-stack/      - Technology inventory
+# Result: Complete documentation in ./wiki/
+# ├── README.md           - Navigation hub
+# ├── overview/           - System overview, tech stack, glossary
+# ├── architecture/       - System design, components, data model
+# ├── features/           - Feature documentation
+# ├── development/        - Setup, coding standards
+# ├── testing/            - Testing strategy
+# └── deployment/         - Build and environments
 ```
 
-### Generate Architecture Documentation
+### Sync Wiki to Claude Code Skills
 
 ```bash
-/context-eng:architecture /path/to/your/project ./docs/architecture
+# After manual edits to wiki, sync to skills
+/deepwiki:sync ./wiki
 
-# Creates detailed documentation:
-# ├── system-architecture.md
-# ├── component-hierarchy.md
-# ├── design-patterns.md
-# ├── data-flow.md
-# └── deployment-architecture.md
+# Creates skills at {home}/.claude/skills/
+# ├── overview/SKILL.md
+# ├── architecture/SKILL.md
+# ├── features/SKILL.md
+# └── ...
+
+# Claude auto-loads relevant context as you work
 ```
 
-### Generate Tailored Coding Guidelines
+### Create Custom Context Skills
 
 ```bash
-/context-eng:coding-guidelines /path/to/your/project ./guidelines
+# Create custom documentation directory
+mkdir -p ./docs/team-conventions
 
-# Detects your tech stack and generates:
-# ├── typescript-guidelines.md
-# ├── react-guidelines.md
-# ├── python-guidelines.md
-# ├── testing-standards.md
-# ├── code-review-checklist.md
-# └── ... (one file per detected technology)
+# Sync with custom skill name
+/deepwiki:sync ./docs/team-conventions conventions
+
+# Result: {home}/.claude/skills/conventions/SKILL.md
 ```
 
-### Generate Project Glossary
+### Sync Single Section
 
 ```bash
-/context-eng:glossary /path/to/your/project ./glossary.md
+# Update only architecture skill after edits
+/deepwiki:sync ./wiki/architecture
 
-# Creates glossary with:
-# - Domain-specific terms extracted from code
-# - Definitions from comments and docstrings
-# - Organized by concept categories
+# Result: Updates {home}/.claude/skills/architecture/SKILL.md
 ```
 
 ## File Format Standards
@@ -477,19 +419,16 @@ Organized by category with consistent structure:
 
 ### For Teams Using This Marketplace
 
-1. **Customize `team_context/`** with your specific standards and processes
-2. **Add Role-Based Plugins** in `plugins/roles/` for specialized workflows
-3. **Add Tech Stack Plugins** in `plugins/tech-stacks/` for specific technologies
-4. **Document Standards** in `team_context/` for team-wide consistency
-5. **Share with Team** and make marketplace available to all team members
+1. **Generate Documentation** with `/deepwiki:init` to create wiki from your codebase
+2. **Sync to Skills** with `/deepwiki:sync` for on-demand context loading
+3. **Add Team Plugins** in `plugins/pandora/{team-name}/` for team-specific workflows
+4. **Share with Team** and make marketplace available to all team members
 
 ### For Multiple Teams
 
 1. **Maintain Core** plugins in `plugins/core/`
 2. **Organize by Team** in `plugins/pandora/{team-name}/`
-3. **Share Common Context** in `team_context/`
-4. **Team-Specific Context** in `team_context/{team-name}/`
-5. **Central Registry** via marketplace.json
+3. **Central Registry** via marketplace.json
 
 ## Contributing
 
@@ -498,14 +437,12 @@ To add new plugins or components to the marketplace:
 1. **Use Templates**: Start with relevant template in `templates/`
 2. **Follow Structure**: Organize in appropriate `plugins/` directory
 3. **Update Registry**: Add entry to `.claude-plugin/marketplace.json`
-4. **Document**: Add documentation to `team_context/` as needed
-5. **Test**: Verify plugin works with Claude Code
+4. **Test**: Verify plugin works with Claude Code
 
 ## Resources
 
 - **Marketplace Configuration**: `.claude-plugin/marketplace.json`
 - **Plugin Templates**: `templates/` directory
-- **Team Context**: `team_context/` directory
 - **Core Plugins**: `plugins/core/` directory
 - **Integration Examples**: `plugins/integrations/` directory
 
@@ -514,18 +451,17 @@ To add new plugins or components to the marketplace:
 **Pandora Marketplace v1.0.0**
 
 - Initial implementation
-- Core plugins: Context Engineering, DeepWiki
+- Core plugins: DeepWiki, Safeguard
 - Integration: LaunchDarkly
-- Comprehensive team context templates
 - Plugin development templates
 
 ## Support
 
 For help:
 
-1. Check `[team_context/development-env/troubleshooting.md](https://code.claude.com/docs/en/plugin-marketplaces)`
-2. Check `[https://code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)`
-3. Check `[https://code.claude.com/docs/en/discover-plugins](https://code.claude.com/docs/en/discover-plugins)`
+1. Check [Plugin Marketplaces Documentation](https://code.claude.com/docs/en/plugin-marketplaces)
+2. Check [Plugins Documentation](https://code.claude.com/docs/en/plugins)
+3. Check [Discover Plugins Documentation](https://code.claude.com/docs/en/discover-plugins)
 
 ---
 

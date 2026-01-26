@@ -1,7 +1,7 @@
 ---
-name: deepwiki-ascii-diagrams
+name: generating-ascii-diagrams
 description: ASCII diagram generation skill for creating professional architectural diagrams in text format. Supports C4 models, sequence diagrams, component diagrams, deployment diagrams, data flow diagrams, class diagrams, and integration diagrams for technical documentation.
-tools: Read, Write
+user-invocable: false
 ---
 
 # ASCII Diagram Generation Skill

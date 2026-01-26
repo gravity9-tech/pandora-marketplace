@@ -1,0 +1,212 @@
+---
+description: Initialize wiki documentation from codebase with evidence-backed content, ASCII diagrams, and context skills.
+argument-hint: <codebase_path> <wiki_location> [user_context]
+allowed-tools: Agent, Write, Bash, Glob
+model: sonnet
+---
+
+# DeepWiki Init Command
+
+Initialize comprehensive wiki documentation from a codebase. Idempotent - does nothing if output already exists.
+
+## Input Parameters
+
+- **Argument 1** (`$1` - required): `codebase_path` - Root directory to analyze (e.g., `./`, `/path/to/project`)
+- **Argument 2** (`$2` - required): `wiki_location` - Output directory for wiki (e.g., `./wiki`, `/path/to/docs/wiki`)
+- **Argument 3** (`$3` - optional): `user_context` - Optional guidance (e.g., "small e-commerce PWA")
+
+## Workflow
+
+### Phase 0: Idempotency Check
+
+**Check if wiki already exists.** If `{wiki_location}/README.md` exists:
+
+1. Display message:
+   ```
+   Wiki already exists at {wiki_location}/
+
+   To regenerate, either:
+   - Delete the existing wiki: rm -rf {wiki_location}
+   - Specify a different output location
+   ```
+
+2. **Stop execution.** Do not proceed to other phases.
+
+This ensures the command is idempotent - running it multiple times with the same arguments has no effect after the first successful run.
+
+### Phase 1: Check for Resume or Generate Structure
+
+1. Check if `{wiki_location}/.temp/todo.md` exists with incomplete items
+
+2. If exists with unchecked items:
+   - Display: `Resuming from: [N] incomplete pages`
+   - Skip to Phase 2
+
+3. If not exists:
+   - Call **deepwiki-planner** subagent:
+     ```json
+     {
+       "codebase_path": "$1",
+       "wiki_location": "$2",
+       "user_context": "$3"
+     }
+     ```
+   - Wait for structure file creation
+   - Create `{wiki_location}/.temp/todo.md` from structure:
+     ```markdown
+     ---
+     generated_at: [ISO timestamp]
+     total_pages: [count]
+     completed: 0
+     ---
+
+     # Documentation Generation Todo List
+
+     - [ ] **overview/system-overview.md** — [purpose]
+     - [ ] **overview/technology-stack.md** — [purpose]
+     - [ ] **architecture/system-architecture.md** — [purpose]
+     ...
+     ```
+   - Display todo list to user
+
+### Phase 2: Generate Pages by Section (Parallel)
+
+1. Group incomplete items by section (e.g., `overview/*`, `architecture/*`)
+
+2. For each section:
+   - Create `{wiki_location}/.temp/queue.md` (if not exists) to track concurrent results:
+     ```markdown
+     ---
+     section: [section_name]
+     status: processing
+     agents_running: [count]
+     ---
+
+     # Pending Results
+
+     [Result entries from subagents]
+     ```
+
+3. Launch parallel **deepwiki-doc-generator** subagents for all pages in section:
+   ```json
+   {
+     "page_path": "[page_path]",
+     "page_purpose": "[purpose]",
+     "required_sections": [...],
+     "required_diagrams": [...],
+     "source_files": [...],
+     "codebase_path": "$1",
+     "wiki_location": "$2",
+     "sitemap_path": "{wiki_location}/.temp/documentation_structure.md"
+   }
+   ```
+
+4. Wait for all agents in section to complete
+
+5. **Verify and persist files for each completed agent:**
+   - Check if `{wiki_location}/[page_path]` file exists
+   - If file exists: Mark todo item as `[x]` (completed)
+   - If file NOT exists:
+     * Extract generated content from agent output
+     * Create directory: `mkdir -p {wiki_location}/[section]/`
+     * Write file with extracted content using Write tool
+     * Mark todo item as `[x]` (completed)
+   - Display: `✓ [page_path]` (verified and persisted)
+
+6. Merge verified results into todo list (atomically update `[ ]` → `[x]` for completed items)
+
+7. Display progress: `✓ Section [name]: [N] pages generated ([Total]/[Max])`
+
+8. Continue to next section
+
+### Phase 3: Generate Context Skills
+
+After all wiki pages are generated, create Claude Code skills for on-demand context loading.
+
+1. Call **deepwiki-skill-generator** subagent:
+   ```json
+   {
+     "wiki_path": "$2",
+     "skills_output_path": "{home}/.claude/skills"
+   }
+   ```
+
+2. The skill generator will:
+   - Analyze wiki structure (top-level directories)
+   - Generate `{section}` skills for each wiki section
+   - Save skills to user's home directory (`{home}/.claude/skills/`)
+
+3. Display skill generation results:
+   ```
+   ✓ Context skills generated:
+     overview      3 pages
+     architecture  5 pages
+     ...
+   ```
+
+**Why `{home}/.claude/skills/`?**
+- Skills are user-specific, not project files
+- Available across all Claude Code sessions
+- Doesn't pollute the project repository
+- Each developer generates their own from the wiki
+
+### Phase 4: Report Completion
+
+When all items checked:
+
+```
+✓ Documentation generation complete!
+  Total pages: [N]
+  Location: {wiki_location}/
+  Structure: {wiki_location}/.temp/documentation_structure.md
+  Todo list: {wiki_location}/.temp/todo.md
+
+✓ Context skills generated at {home}/.claude/skills/
+  Claude will auto-load relevant wiki context as you work.
+```
+
+Resume tips: Run command again to continue from incomplete items.
+
+## File Persistence Strategy
+
+**Key Responsibility:** The slash command (orchestrator) is responsible for ensuring all generated files are persisted to disk, not the subagents.
+
+**Persistence Flow:**
+
+1. **Subagent generates content** → Agent completes with output containing documentation
+2. **Orchestrator verifies file exists** → Check filesystem for `{wiki_location}/[page_path]`
+3. **If file missing:**
+   - Extract content from agent output (parse markdown between `---` markers)
+   - Create parent directory: `mkdir -p {wiki_location}/[section]/`
+   - Write content to file using Write tool
+   - Ensure atomicity: file written before marking todo as complete
+4. **Mark todo item complete** → Only after file verification succeeds
+
+**Rationale:** Prevents silent failures where agents report completion but files don't persist. Guarantees consistency between todo list and actual filesystem state.
+
+## Output
+
+- **Structure File**: `{wiki_location}/.temp/documentation_structure.md` — Generated by planner
+- **Todo List**: `{wiki_location}/.temp/todo.md` — Generated and managed by slash command
+- **Wiki Pages**: `{wiki_location}/[page_path]/*.md` — Generated by doc generator
+- **Progress**: Real-time updates shown to user after each page
+
+## Example Usage
+
+```
+/deepwiki:init ./ ./wiki
+/deepwiki:init /path/to/repo /path/to/repo/wiki "Small e-commerce PWA"
+/deepwiki:init ./myproject ./myproject/docs "Microservices backend"
+```
+
+## Idempotency
+
+This command is idempotent:
+- If `{wiki_location}/README.md` exists → does nothing, suggests alternatives
+- If `{wiki_location}/.temp/todo.md` exists with incomplete items → resumes from where it left off
+- If neither exists → starts fresh generation
+
+To force regeneration, delete the existing wiki first:
+```bash
+rm -rf ./wiki && /deepwiki:init ./ ./wiki
+```
