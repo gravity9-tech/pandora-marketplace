@@ -164,21 +164,24 @@ After all wiki pages are generated, create Claude Code skills for on-demand cont
    ```json
    {
      "wiki_path": "$2",
-     "skills_output_path": "{home}/.claude/skills"
+     "skills_output_path": "{home}/.claude/skills",
+     "source_project": "{absolute_path_to_codebase}"
    }
    ```
 
 2. The skill generator will:
    - Analyze wiki structure (top-level directories)
-   - Generate `{section}` skills for each wiki section
-   - Save skills to user's home directory (`{home}/.claude/skills/`)
+   - Generate `pandora-{section}` skills for each wiki section
+   - Add tracking metadata to each SKILL.md frontmatter
+   - Update the pandora registry at `{home}/.claude/skills/.pandora-registry.json`
+   - Save skills to user's home directory (`{home}/.claude/skills/pandora-{section}/`)
 
 3. **Register each skill in CLAUDE.md:**
 
    For each generated skill, add a row to the skills table in CLAUDE.md:
 
    ```markdown
-   | {skill_name} | {skill_description}. Invoke when {trigger_condition}. |
+   | pandora-{skill_name} | {skill_description}. Invoke when {trigger_condition}. |
    ```
 
    Insert each row before the `<!-- Skills are automatically registered` comment line.
@@ -186,10 +189,11 @@ After all wiki pages are generated, create Claude Code skills for on-demand cont
 4. Display skill generation results:
    ```
    ✓ Context skills generated:
-     overview      3 pages  → registered in CLAUDE.md
-     architecture  5 pages  → registered in CLAUDE.md
+     pandora-overview      3 pages  → registered in CLAUDE.md
+     pandora-architecture  5 pages  → registered in CLAUDE.md
      ...
 
+   Registry: {home}/.claude/skills/.pandora-registry.json
    CLAUDE.md updated with skill references.
    ```
 
@@ -198,6 +202,12 @@ After all wiki pages are generated, create Claude Code skills for on-demand cont
 - Available across all Claude Code sessions
 - Doesn't pollute the project repository
 - Each developer generates their own from the wiki
+
+**Pandora Skill Tracking:**
+- All skills use `pandora-` prefix to distinguish from user-created skills
+- Each SKILL.md contains `_generator`, `_source_project`, `_generated_at` metadata
+- All skills tracked in `.pandora-registry.json` for easy management
+- Use `/deepwiki:skills` to list and manage pandora-generated skills
 
 ### Phase 4: Report Completion
 
@@ -210,13 +220,21 @@ When all items checked:
   Structure: {wiki_location}/.temp/documentation_structure.md
   Todo list: {wiki_location}/.temp/todo.md
 
-✓ Context skills generated at {home}/.claude/skills/
+✓ Context skills generated at {home}/.claude/skills/pandora-*/
+✓ Registry updated: {home}/.claude/skills/.pandora-registry.json
 ✓ Skills registered in ./CLAUDE.md
 
+Tracking mechanisms:
+  1. Prefix: All skills named pandora-{section}
+  2. Metadata: Each SKILL.md contains _generator, _source_project, _generated_at
+  3. Registry: All skills tracked in .pandora-registry.json
+
 Claude will now auto-discover and load relevant wiki context when you:
-  - Ask about architecture → loads architecture skill → reads wiki/architecture/
-  - Work on features → loads features skill → reads wiki/features/
-  - Ask about setup → loads development skill → reads wiki/development/
+  - Ask about architecture → loads pandora-architecture skill → reads wiki/architecture/
+  - Work on features → loads pandora-features skill → reads wiki/features/
+  - Ask about setup → loads pandora-development skill → reads wiki/development/
+
+Use /deepwiki:skills to list and manage pandora-generated skills.
 ```
 
 Resume tips: Run command again to continue from incomplete items.

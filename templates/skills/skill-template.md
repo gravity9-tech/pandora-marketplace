@@ -1,6 +1,10 @@
 ---
 name: your-skill-name
 description: Brief description of what this skill does and when to use it. Include specific keywords users would mention and the domain it applies to. (Max 1024 characters)
+# Pandora Marketplace tracking metadata (auto-generated, do not modify)
+_generator: pandora-marketplace
+_source_project: /path/to/source/project
+_generated_at: 2026-01-27T00:00:00Z
 ---
 
 # Your Skill Name
