@@ -124,6 +124,116 @@ After installation, each plugin provides specific commands. Refer to individual 
 | Setup security | `/install` |
 | Add feature flag | `/add-feature-flag <flag-name>` |
 
+## Pandora Hub
+
+The pandora hub supports team-contributed components that can be selectively installed. Teams publish agents, hooks, MCP servers, skills, slash commands, and workflows that other users can browse and install.
+
+### Team Structure
+
+Each team has a dedicated directory under `plugins/community/online/` with the following structure:
+
+```
+plugins/community/online/{team-name}/
+├── manifest.json           # Team metadata and component registry
+├── agents/                 # Claude Code agents
+├── hooks/                  # Event-driven hooks
+├── mcp_servers/            # MCP server configurations
+├── skills/                 # Reusable skills
+├── slash_commands/         # Slash commands
+└── workflows/              # Multi-step workflows
+```
+
+### Team Manifest
+
+Each team's `manifest.json` defines available components:
+
+```json
+{
+  "team": "team-name",
+  "description": "Team description",
+  "version": "1.0.0",
+  "maintainers": ["maintainer@example.com"],
+  "components": {
+    "agents": [
+      { "name": "agent-name", "description": "What it does", "path": "./agents/agent-name.md" }
+    ],
+    "hooks": [
+      { "name": "hook-name", "description": "What it does", "path": "./hooks/hook-name/" }
+    ],
+    "mcp_servers": [
+      { "name": "server-name", "description": "What it does", "path": "./mcp_servers/server-name/" }
+    ],
+    "skills": [
+      { "name": "skill-name", "description": "What it does", "path": "./skills/skill-name/" }
+    ],
+    "slash_commands": [
+      { "name": "command-name", "description": "What it does", "path": "./slash_commands/command-name.md" }
+    ],
+    "workflows": [
+      { "name": "workflow-name", "description": "What it does", "path": "./workflows/workflow-name/" }
+    ]
+  }
+}
+```
+
+### Available Teams
+
+| Team | Description |
+|------|-------------|
+| `decide-team` | Decision-making tools and workflows |
+| `find-team` | Search and discovery tools |
+| `inspire-team` | Creative and inspiration tools |
+
+### Browsing and Installing Team Components
+
+**Step 1: List available teams**
+```bash
+/pandora:teams
+```
+
+**Step 2: Browse a team's components**
+```bash
+/pandora:browse decide-team
+```
+
+**Step 3: Install components**
+```bash
+# Interactive installation (prompts for team, type, component)
+/pandora:install
+
+# Install a specific component
+/pandora:install decide-team agents hello-world
+
+# Install all agents from a team
+/pandora:install decide-team agents *
+
+# Install all components from a team
+/pandora:install decide-team *
+```
+
+**Command Syntax:**
+| Arguments | Behavior |
+|-----------|----------|
+| (none) | Guided - prompts for team, type, component |
+| `<team>` | Prompts for type and component |
+| `<team> <type>` | Prompts for component |
+| `<team> <type> <name>` | Installs directly |
+| `<team> <type> *` | Installs all of that type |
+| `<team> *` | Installs everything from team |
+
+### Component Installation Targets
+
+Components are installed to your `~/.claude/` directory:
+
+| Component Type | Installation Location |
+|----------------|----------------------|
+| agents | `~/.claude/agents/` |
+| hooks | `~/.claude/hooks/` + settings.json |
+| mcp_servers | `~/.claude/mcp_servers/` + settings.json |
+| skills | `~/.claude/skills/` |
+| slash_commands | `~/.claude/commands/` |
+| workflows | `~/.claude/workflows/` |
+
 ## Project Structure
 
 ```
@@ -145,11 +255,20 @@ pandora_marketplace/
 │   │   └── launchdarkly/             # LaunchDarkly feature flags
 │   │       ├── commands/             # add-feature-flag.md, remove-feature-flag.md
 │   │       └── mcp/                  # MCP server configuration
-│   └── pandora/                      # Organization-specific plugins
-│       └── online/                   # Online team configurations
-│           ├── decide-team/          # Team context and plugins
-│           ├── find-team/            # Team context and plugins
-│           └── inspire-team/         # Team context and plugins
+│   └── community/                    # Community-contributed components
+│       └── online/                   # Online teams
+│           ├── decide-team/          # Decision-making tools
+│           │   ├── manifest.json     # Team metadata and component registry
+│           │   ├── agents/           # Team agents
+│           │   ├── hooks/            # Team hooks
+│           │   ├── mcp_servers/      # Team MCP servers
+│           │   ├── skills/           # Team skills
+│           │   ├── slash_commands/   # Team slash commands
+│           │   └── workflows/        # Team workflows
+│           ├── find-team/            # Search and discovery tools
+│           │   └── ...               # Same structure as above
+│           └── inspire-team/         # Creative and inspiration tools
+│               └── ...               # Same structure as above
 ├── templates/                        # Templates for creating new plugins
 │   ├── agents/                       # Agent creation templates
 │   ├── hooks/                        # Hook implementation templates
@@ -285,7 +404,8 @@ Plugins are organized by category:
 plugins/
 ├── core/              # Essential plugins included by default
 ├── integrations/      # Third-party service integrations
-└── pandora/          # Organization-specific plugins and customizations
+└── community/         # Community-contributed components
+    └── online/        # Online teams (selectively installable)
 ```
 
 ### Plugin Components
@@ -421,14 +541,22 @@ Organized by category with consistent structure:
 
 1. **Generate Documentation** with `/deepwiki:init` to create wiki from your codebase
 2. **Sync to Skills** with `/deepwiki:sync` for on-demand context loading
-3. **Add Team Plugins** in `plugins/pandora/{team-name}/` for team-specific workflows
+3. **Add Team Components** in `plugins/community/online/{team-name}/` for team-specific tools
 4. **Share with Team** and make marketplace available to all team members
 
 ### For Multiple Teams
 
 1. **Maintain Core** plugins in `plugins/core/`
-2. **Organize by Team** in `plugins/pandora/{team-name}/`
-3. **Central Registry** via marketplace.json
+2. **Organize by Team** in `plugins/community/online/{team-name}/`
+3. **Central Registry** via manifest.json in each team directory
+
+### Contributing Team Components
+
+To add components to a team:
+
+1. Create component in the appropriate directory (e.g., `plugins/community/online/decide-team/agents/`)
+2. Update the team's `manifest.json` to register the component
+3. Follow the templates in `templates/` for proper formatting
 
 ## Contributing
 

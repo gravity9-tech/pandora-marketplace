@@ -1,0 +1,124 @@
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, Bot, Lightbulb, Terminal, Link as LinkIcon, Server, Workflow } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { CopyPathInline } from '@/components/detail/CopyPathButton';
+import { FrontmatterDisplay } from '@/components/detail/FrontmatterDisplay';
+import { MarkdownViewer } from '@/components/detail/MarkdownViewer';
+import { useComponent } from '@/hooks/useComponent';
+import type { ComponentType } from '@/types/marketplace';
+
+// Component type icons
+const typeIcons: Record<ComponentType, React.ReactNode> = {
+  agent: <Bot className="h-5 w-5" />,
+  skill: <Lightbulb className="h-5 w-5" />,
+  slash_command: <Terminal className="h-5 w-5" />,
+  hook: <LinkIcon className="h-5 w-5" />,
+  mcp_server: <Server className="h-5 w-5" />,
+  workflow: <Workflow className="h-5 w-5" />,
+};
+
+// Type labels
+const typeLabels: Record<ComponentType, string> = {
+  agent: 'Agent',
+  skill: 'Skill',
+  slash_command: 'Command',
+  hook: 'Hook',
+  mcp_server: 'MCP Server',
+  workflow: 'Workflow',
+};
+
+function BackLink() {
+  return (
+    <Link
+      to="/browse"
+      className="inline-flex items-center h-9 px-3 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors mb-6"
+    >
+      <ArrowLeft className="h-4 w-4 mr-2" />
+      Back to Browse
+    </Link>
+  );
+}
+
+export function ComponentPage() {
+  const { path } = useParams<{ path: string }>();
+  const decodedPath = path ? decodeURIComponent(path) : undefined;
+  const { data: component, isLoading, error } = useComponent(decodedPath);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <Skeleton className="h-8 w-32 mb-6" />
+        <Skeleton className="h-10 w-64 mb-4" />
+        <Skeleton className="h-6 w-96 mb-8" />
+        <Skeleton className="h-32 w-full mb-6" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
+  if (error || !component) {
+    return (
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <BackLink />
+        <div className="text-center py-12">
+          <h1 className="text-2xl font-bold mb-2">Component Not Found</h1>
+          <p className="text-muted-foreground mb-4">
+            The component you're looking for doesn't exist or couldn't be loaded.
+          </p>
+          <p className="text-sm text-muted-foreground font-mono">{decodedPath}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const componentName =
+    component.frontmatter.name ||
+    decodedPath?.split('/').pop()?.replace(/\.md$/, '') ||
+    'Unknown Component';
+
+  return (
+    <div className="container mx-auto px-4 py-6 max-w-4xl">
+      {/* Back button */}
+      <BackLink />
+
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
+            {typeIcons[component.type]}
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">{componentName}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge variant={component.type}>{typeLabels[component.type]}</Badge>
+              <Badge variant="team">{component.teamName}</Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Description from frontmatter */}
+        {component.frontmatter.description && (
+          <p className="text-muted-foreground mt-3">{component.frontmatter.description}</p>
+        )}
+      </div>
+
+      {/* Copy path */}
+      <div className="mb-6">
+        <h3 className="text-sm font-medium mb-2">Installation Path</h3>
+        <CopyPathInline path={component.path} />
+        <p className="text-xs text-muted-foreground mt-2">
+          Use this path with your local clone of the pandora-marketplace repository
+        </p>
+      </div>
+
+      {/* Frontmatter metadata */}
+      <FrontmatterDisplay frontmatter={component.frontmatter} />
+
+      {/* Markdown content */}
+      <div className="border rounded-lg p-6">
+        <MarkdownViewer content={component.content} />
+      </div>
+    </div>
+  );
+}

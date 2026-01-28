@@ -1,0 +1,14 @@
+{
+  "team": "find-team",
+  "description": "Search and discovery tools for Claude Code",
+  "version": "1.0.0",
+  "maintainers": [],
+  "components": {
+    "agents": [],
+    "hooks": [],
+    "mcp_servers": [],
+    "skills": [],
+    "slash_commands": [],
+    "workflows": []
+  }
+}

@@ -9,31 +9,6 @@
   },
   "plugins": [
     {
-      "name": "ctx",
-      "source": "./plugins/core/ctx",
-      "description": "Unified context toolkit for Claude Code. Includes scan commands for analyzing codebase architecture, tech stack, coding guidelines, and glossaries. Includes sync commands for team context distribution and synchronization.",
-      "version": "1.0.0",
-      "author": {
-        "name": "Pandora Team"
-      },
-      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
-      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
-      "category": "core",
-      "keywords": ["context", "architecture", "documentation", "codebase", "team", "distribution", "templates"],
-      "commands": [
-        "./commands/scan/all.md",
-        "./commands/scan/architecture.md",
-        "./commands/scan/coding-guidelines.md",
-        "./commands/scan/glossary.md",
-        "./commands/scan/tech-stack.md",
-        "./commands/sync/init.md",
-        "./commands/sync/pull.md",
-        "./commands/sync/list.md",
-        "./commands/sync/update.md",
-        "./commands/sync/delete.md"
-      ]
-    },
-    {
       "name": "deepwiki",
       "source": "./plugins/core/deepwiki",
       "description": "Comprehensive documentation generation system for codebases. Analyzes your codebase structure and generates evidence-backed, well-organized markdown documentation with ASCII diagrams and automatic cross-references.",
@@ -81,6 +56,24 @@
       ],
       "skills": [
         "./skills/damage-control"
+      ]
+    },
+    {
+      "name": "pandora",
+      "source": "./plugins/core/pandora",
+      "description": "Pandora hub commands for browsing and installing team-contributed components including agents, hooks, MCP servers, skills, slash commands, and workflows.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Pandora Team"
+      },
+      "homepage": "https://github.com/gravity9-tech/pandora-marketplace",
+      "repository": "https://github.com/gravity9-tech/pandora-marketplace",
+      "category": "core",
+      "keywords": ["pandora", "teams", "install", "components", "community"],
+      "commands": [
+        "./commands/teams.md",
+        "./commands/browse.md",
+        "./commands/install.md"
       ]
     },
     {

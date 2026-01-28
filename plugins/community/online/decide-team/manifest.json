@@ -1,0 +1,14 @@
+{
+  "team": "decide-team",
+  "description": "Decision-making tools and workflows for Claude Code",
+  "version": "1.0.0",
+  "maintainers": [],
+  "components": {
+    "agents": ["hello-world"],
+    "hooks": [],
+    "mcp_servers": [],
+    "skills": [],
+    "slash_commands": [],
+    "workflows": []
+  }
+}
