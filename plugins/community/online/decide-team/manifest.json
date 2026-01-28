@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": ["hello-world"],
-    "hooks": [],
-    "mcp_servers": [],
-    "skills": [],
-    "slash_commands": [],
-    "workflows": []
+    "agents": ["code-review", "unit-test"],
+    "hooks": ["pre-commit-check"],
+    "mcp_servers": ["decision-logger"],
+    "skills": ["code-analysis"],
+    "slash_commands": ["review", "test"],
+    "workflows": ["pr-review"]
   }
 }

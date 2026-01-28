@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": [],
-    "hooks": [],
-    "mcp_servers": [],
-    "skills": [],
-    "slash_commands": [],
-    "workflows": []
+    "agents": ["readme-generator", "changelog-writer"],
+    "hooks": ["commit-message-enhancer"],
+    "mcp_servers": ["template-server"],
+    "skills": ["writing-guidelines"],
+    "slash_commands": ["generate", "scaffold"],
+    "workflows": ["project-setup"]
   }
 }

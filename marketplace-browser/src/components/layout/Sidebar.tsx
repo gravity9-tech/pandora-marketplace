@@ -134,9 +134,9 @@ function TeamTreeItem({ manifest, isExpanded, onToggle, onNavigate, currentPath 
     <div>
       <button
         onClick={onToggle}
-        className="flex items-center justify-between w-full px-2 py-1.5 text-sm rounded-md hover:bg-accent"
+        className="flex items-center justify-between w-full px-2 py-2 text-base rounded-md hover:bg-accent"
       >
-        <span className="text-green-600 dark:text-green-400 truncate">{manifest.team}</span>
+        <span className="text-green-600 dark:text-green-400 truncate font-medium">{manifest.team}</span>
         <span className="flex items-center gap-1 text-muted-foreground">
           <span className="text-xs">{totalComponents}</span>
           {isExpanded ? (

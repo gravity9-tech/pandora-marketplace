@@ -240,8 +240,6 @@ Components are installed to your `~/.claude/` directory:
 pandora_marketplace/
 ├── .claude/
 │   └── settings.json                 # Claude Code settings
-├── .claude-plugin/
-│   └── marketplace.json              # Marketplace configuration and registry
 ├── plugins/                          # All Claude Code plugins and extensions
 │   ├── core/                         # Core plugins (always included)
 │   │   ├── deepwiki/                 # Documentation generation suite
@@ -328,7 +326,7 @@ cd pandora_marketplace
 
 ### 2. Register in Claude Code
 
-The marketplace is automatically registered via `.claude-plugin/marketplace.json`. Claude Code will:
+Claude Code will:
 - Discover all plugins in the `/plugins` directory
 - Load marketplace configuration
 - Make all commands, agents, and skills available
@@ -417,26 +415,6 @@ Each plugin can contain:
 - **Skills** (`.skills/`): Reusable capabilities with templates
 - **Workflows** (`.workflows/`): Multi-step orchestrated processes
 - **MCP Servers** (`.mcp/`): Model Context Protocol integrations
-
-### Marketplace Registry
-
-`.claude-plugin/marketplace.json` maintains the registry of all plugins:
-
-```json
-{
-  "version": "1.0.0",
-  "description": "Pandora Marketplace catalog",
-  "plugins": [
-    {
-      "name": "plugin-name",
-      "source": "path/to/the/plugin",
-      "description": "Sample description of the plugin",
-      "version": "1.0.0",
-      "category": "core"
-    }
-  ]
-}
-```
 
 ## Usage Examples
 
@@ -564,12 +542,10 @@ To add new plugins or components to the marketplace:
 
 1. **Use Templates**: Start with relevant template in `templates/`
 2. **Follow Structure**: Organize in appropriate `plugins/` directory
-3. **Update Registry**: Add entry to `.claude-plugin/marketplace.json`
-4. **Test**: Verify plugin works with Claude Code
+3. **Test**: Verify plugin works with Claude Code
 
 ## Resources
 
-- **Marketplace Configuration**: `.claude-plugin/marketplace.json`
 - **Plugin Templates**: `templates/` directory
 - **Core Plugins**: `plugins/core/` directory
 - **Integration Examples**: `plugins/integrations/` directory

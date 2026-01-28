@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": [],
-    "hooks": [],
-    "mcp_servers": [],
-    "skills": [],
-    "slash_commands": [],
-    "workflows": []
+    "agents": ["codebase-explorer", "dependency-finder"],
+    "hooks": ["unused-import-detector"],
+    "mcp_servers": ["search-indexer"],
+    "skills": ["regex-patterns", "file-navigation"],
+    "slash_commands": ["find", "grep-all"],
+    "workflows": ["dead-code-finder"]
   }
 }

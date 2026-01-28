@@ -1,6 +1,0 @@
-{
-  "name": "pandora",
-  "version": "1.0.0",
-  "description": "Pandora hub commands for browsing and installing team-contributed components including agents, hooks, MCP servers, skills, slash commands, and workflows.",
-  "keywords": ["pandora", "teams", "install", "components", "community"]
-}
