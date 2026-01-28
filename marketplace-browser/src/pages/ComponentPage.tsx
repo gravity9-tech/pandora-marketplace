@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Bot, Lightbulb, Terminal, Link as LinkIcon, Server, Workflow } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CopyPathInline } from '@/components/detail/CopyPathButton';
 import { FrontmatterDisplay } from '@/components/detail/FrontmatterDisplay';
@@ -32,7 +33,7 @@ function BackLink() {
   return (
     <Link
       to="/browse"
-      className="inline-flex items-center h-9 px-3 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors mb-6"
+      className="inline-flex items-center h-9 px-3 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
     >
       <ArrowLeft className="h-4 w-4 mr-2" />
       Back to Browse
@@ -79,46 +80,57 @@ export function ComponentPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-4xl">
-      {/* Back button */}
-      <BackLink />
+      {/* Navigation */}
+      <div className="mb-6">
+        <BackLink />
+      </div>
 
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
-            {typeIcons[component.type]}
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">{componentName}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge variant={component.type}>{typeLabels[component.type]}</Badge>
-              <Badge variant="team">{component.teamName}</Badge>
+      {/* Header Card */}
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <div className="flex items-start gap-4">
+            <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center shrink-0">
+              {typeIcons[component.type]}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold mb-2">{componentName}</h1>
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                <Badge variant={component.type}>{typeLabels[component.type]}</Badge>
+                <Badge variant="team">{component.teamName}</Badge>
+              </div>
+              {component.frontmatter.description && (
+                <p className="text-muted-foreground">{component.frontmatter.description}</p>
+              )}
             </div>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Description from frontmatter */}
-        {component.frontmatter.description && (
-          <p className="text-muted-foreground mt-3">{component.frontmatter.description}</p>
-        )}
-      </div>
-
-      {/* Copy path */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium mb-2">Installation Path</h3>
-        <CopyPathInline path={component.path} />
-        <p className="text-xs text-muted-foreground mt-2">
-          Use this path with your local clone of the pandora-marketplace repository
-        </p>
-      </div>
+      {/* Install Command Card */}
+      <Card className="mb-6">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium">Install Command</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CopyPathInline path={component.path} />
+          <p className="text-xs text-muted-foreground mt-3">
+            Run this command in Claude Code to install the component
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Frontmatter metadata */}
       <FrontmatterDisplay frontmatter={component.frontmatter} />
 
-      {/* Markdown content */}
-      <div className="border rounded-lg p-6">
-        <MarkdownViewer content={component.content} />
-      </div>
+      {/* Documentation Content */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium">Documentation</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <MarkdownViewer content={component.content} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

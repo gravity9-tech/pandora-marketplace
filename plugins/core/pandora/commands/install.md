@@ -1,6 +1,6 @@
 ---
 description: Install components from a team in the pandora hub
-argument-hint: "[team] [type] [name]"
+argument-hint: "[team/type/name]"
 allowed-tools: Read, Write, Bash, Glob, AskUserQuestion
 ---
 
@@ -10,24 +10,26 @@ Install components from a pandora hub team to your local Claude Code configurati
 
 ## Arguments (All Optional)
 
-The command supports progressive narrowing. Any missing arguments will be prompted interactively.
+The command supports progressive narrowing using path-like syntax: `team/type/name`
+
+Any missing parts will be prompted interactively.
 
 | Arguments | Behavior |
 |-----------|----------|
 | (none) | Ask team → Ask type → Ask component |
 | `<team>` | Ask type → Ask component |
-| `<team> <type>` | Ask component |
-| `<team> <type> <name>` | Install directly |
-| `<team> <type> *` | Install all of type |
-| `<team> *` | Install all from team |
+| `<team>/<type>` | Ask component |
+| `<team>/<type>/<name>` | Install directly |
+| `<team>/<type>/*` | Install all of type |
+| `<team>/*` | Install all from team |
 
 Examples:
 - `/pandora:install` - Guided installation
 - `/pandora:install decide-team` - Choose type and component from decide-team
-- `/pandora:install decide-team agents` - Choose which agent to install
-- `/pandora:install decide-team agents my-agent` - Install specific agent directly
-- `/pandora:install decide-team agents *` - Install all agents
-- `/pandora:install decide-team *` - Install everything from team
+- `/pandora:install decide-team/agents` - Choose which agent to install
+- `/pandora:install decide-team/agents/my-agent` - Install specific agent directly
+- `/pandora:install decide-team/agents/*` - Install all agents
+- `/pandora:install decide-team/*` - Install everything from team
 
 ## Step 0: Determine Home Directory
 
@@ -60,7 +62,7 @@ $HOME/.claude/plugins/marketplaces/pandora-marketplace/plugins/community/online/
 
 ### 1. Parse Arguments and Progressively Narrow
 
-Parse space-separated arguments: `[team] [type] [name]`
+Parse path-like argument: `[team]/[type]/[name]` (split by `/`)
 
 **Step 1a: Determine Team**
 

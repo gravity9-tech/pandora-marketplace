@@ -3,6 +3,16 @@ import { Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+// Convert full path to install command format
+// e.g., "plugins/community/online/decide-team/agents/hello-world.md" -> "/pandora:install decide-team/agents/hello-world"
+function formatInstallCommand(path: string): string {
+  // Remove prefix and .md extension
+  const cleanPath = path
+    .replace(/^plugins\/community\/online\//, '')
+    .replace(/\.md$/, '');
+  return `/pandora:install ${cleanPath}`;
+}
+
 interface CopyPathButtonProps {
   path: string;
   className?: string;
@@ -17,10 +27,11 @@ export function CopyPathButton({
   showPath = false,
 }: CopyPathButtonProps) {
   const [copied, setCopied] = useState(false);
+  const installCommand = formatInstallCommand(path);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(path);
+      await navigator.clipboard.writeText(installCommand);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -43,7 +54,7 @@ export function CopyPathButton({
       ) : (
         <>
           <Copy className="h-4 w-4" />
-          {showPath ? <span className="font-mono text-xs truncate max-w-[300px]">{path}</span> : <span>Copy Path</span>}
+          {showPath ? <span className="font-mono text-xs truncate max-w-[300px]">{installCommand}</span> : <span>Copy Command</span>}
         </>
       )}
     </Button>
@@ -53,10 +64,11 @@ export function CopyPathButton({
 // Inline code-style copy button
 export function CopyPathInline({ path, className }: { path: string; className?: string }) {
   const [copied, setCopied] = useState(false);
+  const installCommand = formatInstallCommand(path);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(path);
+      await navigator.clipboard.writeText(installCommand);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -72,7 +84,7 @@ export function CopyPathInline({ path, className }: { path: string; className?: 
         className
       )}
     >
-      <code className="truncate">{path}</code>
+      <code className="truncate">{installCommand}</code>
       {copied ? (
         <Check className="h-4 w-4 text-green-500 shrink-0" />
       ) : (
