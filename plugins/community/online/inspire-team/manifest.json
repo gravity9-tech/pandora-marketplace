@@ -5,24 +5,56 @@
   "maintainers": [],
   "components": {
     "agents": [
-      { "name": "readme-generator", "labels": ["documentation", "code-generation"] },
-      { "name": "changelog-writer", "labels": ["documentation", "devops"] }
+      {
+        "name": "readme-generator",
+        "description": "Generates comprehensive README files from your codebase structure",
+        "labels": ["documentation", "code-generation"]
+      },
+      {
+        "name": "changelog-writer",
+        "description": "Automatically generates changelogs from git commits and PR descriptions",
+        "labels": ["documentation", "devops"]
+      }
     ],
     "hooks": [
-      { "name": "commit-message-enhancer", "labels": ["devops", "documentation"] }
+      {
+        "name": "commit-message-enhancer",
+        "description": "Improves commit messages with context and conventional commit format",
+        "labels": ["devops", "documentation"]
+      }
     ],
     "mcp_servers": [
-      { "name": "template-server", "labels": ["code-generation", "architecture"] }
+      {
+        "name": "template-server",
+        "description": "Serves project templates and boilerplate code for quick scaffolding",
+        "labels": ["code-generation", "architecture"]
+      }
     ],
     "skills": [
-      { "name": "writing-guidelines", "labels": ["documentation"] }
+      {
+        "name": "writing-guidelines",
+        "description": "Best practices for technical writing, documentation, and comments",
+        "labels": ["documentation"]
+      }
     ],
     "slash_commands": [
-      { "name": "generate", "labels": ["code-generation"] },
-      { "name": "scaffold", "labels": ["code-generation", "architecture"] }
+      {
+        "name": "generate",
+        "description": "Generate code, docs, or configs from natural language descriptions",
+        "labels": ["code-generation"]
+      },
+      {
+        "name": "scaffold",
+        "description": "Create project structure and boilerplate from predefined templates",
+        "labels": ["code-generation", "architecture"]
+      }
     ],
     "workflows": [
-      { "name": "project-setup", "labels": ["devops", "architecture", "code-generation"] }
+      {
+        "name": "project-setup",
+        "description": "Complete project initialization with structure, configs, and CI/CD setup",
+        "labels": ["devops", "architecture", "code-generation"]
+      }
     ]
   }
 }

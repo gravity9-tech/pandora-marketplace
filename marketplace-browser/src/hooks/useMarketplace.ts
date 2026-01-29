@@ -4,12 +4,13 @@ import type { TeamManifest, FlatComponent, ComponentType, ComponentEntry } from 
 import { buildComponentPath } from '@/lib/paths';
 
 // Helper to normalize component entries (supports both string and object format)
-function normalizeComponentEntry(entry: string | ComponentEntry): { name: string; labels: string[] } {
+function normalizeComponentEntry(entry: string | ComponentEntry): { name: string; description: string; labels: string[] } {
   if (typeof entry === 'string') {
-    return { name: entry, labels: ['general'] };
+    return { name: entry, description: '', labels: ['general'] };
   }
   return {
     name: entry.name,
+    description: entry.description || '',
     labels: entry.labels && entry.labels.length > 0 ? entry.labels : ['general'],
   };
 }
@@ -80,13 +81,13 @@ export function useFlatComponents() {
         const components = manifest.components[key] || [];
 
         for (const entry of components) {
-          const { name: componentName, labels } = normalizeComponentEntry(entry);
+          const { name: componentName, description, labels } = normalizeComponentEntry(entry);
           const path = buildComponentPath(teamName, type, componentName);
 
           flatComponents.push({
             id: path,
             name: componentName,
-            description: '', // Will be filled when component is fetched
+            description,
             type,
             teamName,
             path,

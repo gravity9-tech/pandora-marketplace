@@ -5,24 +5,56 @@
   "maintainers": [],
   "components": {
     "agents": [
-      { "name": "code-review", "labels": ["backend", "code-review", "testing"] },
-      { "name": "unit-test", "labels": ["testing", "backend"] }
+      {
+        "name": "code-review",
+        "description": "Automated code review agent that analyzes code quality, patterns, and best practices",
+        "labels": ["backend", "code-review", "testing"]
+      },
+      {
+        "name": "unit-test",
+        "description": "Generates comprehensive unit tests for your codebase with coverage analysis",
+        "labels": ["testing", "backend"]
+      }
     ],
     "hooks": [
-      { "name": "pre-commit-check", "labels": ["devops", "code-review"] }
+      {
+        "name": "pre-commit-check",
+        "description": "Validates code quality and runs linting checks before each commit",
+        "labels": ["devops", "code-review"]
+      }
     ],
     "mcp_servers": [
-      { "name": "decision-logger", "labels": ["monitoring", "debugging"] }
+      {
+        "name": "decision-logger",
+        "description": "Logs and tracks architectural decisions and their rationale over time",
+        "labels": ["monitoring", "debugging"]
+      }
     ],
     "skills": [
-      { "name": "code-analysis", "labels": ["code-review", "architecture"] }
+      {
+        "name": "code-analysis",
+        "description": "Deep code analysis patterns for identifying complexity and technical debt",
+        "labels": ["code-review", "architecture"]
+      }
     ],
     "slash_commands": [
-      { "name": "review", "labels": ["code-review"] },
-      { "name": "test", "labels": ["testing"] }
+      {
+        "name": "review",
+        "description": "Quick code review command for the current file or selection",
+        "labels": ["code-review"]
+      },
+      {
+        "name": "test",
+        "description": "Generate and run tests for the current context",
+        "labels": ["testing"]
+      }
     ],
     "workflows": [
-      { "name": "pr-review", "labels": ["code-review", "devops"] }
+      {
+        "name": "pr-review",
+        "description": "Complete pull request review workflow with automated checks and feedback",
+        "labels": ["code-review", "devops"]
+      }
     ]
   }
 }

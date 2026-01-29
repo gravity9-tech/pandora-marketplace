@@ -52,7 +52,7 @@ export function ComponentCard({ component, className }: ComponentCardProps) {
               {typeLabels[component.type]}
             </Badge>
           </div>
-          <CardDescription className="line-clamp-2 text-sm">
+          <CardDescription className="truncate text-sm">
             {component.description || 'No description available'}
           </CardDescription>
         </CardHeader>

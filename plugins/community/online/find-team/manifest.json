@@ -5,25 +5,61 @@
   "maintainers": [],
   "components": {
     "agents": [
-      { "name": "codebase-explorer", "labels": ["architecture", "debugging"] },
-      { "name": "dependency-finder", "labels": ["devops", "security"] }
+      {
+        "name": "codebase-explorer",
+        "description": "Intelligently navigates and maps large codebases to understand architecture",
+        "labels": ["architecture", "debugging"]
+      },
+      {
+        "name": "dependency-finder",
+        "description": "Analyzes and visualizes project dependencies and their security status",
+        "labels": ["devops", "security"]
+      }
     ],
     "hooks": [
-      { "name": "unused-import-detector", "labels": ["refactoring", "frontend", "backend"] }
+      {
+        "name": "unused-import-detector",
+        "description": "Automatically detects and reports unused imports across your codebase",
+        "labels": ["refactoring", "frontend", "backend"]
+      }
     ],
     "mcp_servers": [
-      { "name": "search-indexer", "labels": ["data", "backend"] }
+      {
+        "name": "search-indexer",
+        "description": "High-performance search indexer for fast code and content discovery",
+        "labels": ["data", "backend"]
+      }
     ],
     "skills": [
-      { "name": "regex-patterns", "labels": ["general"] },
-      { "name": "file-navigation", "labels": ["general"] }
+      {
+        "name": "regex-patterns",
+        "description": "Common regex patterns for parsing logs, URLs, emails, and more",
+        "labels": ["general"]
+      },
+      {
+        "name": "file-navigation",
+        "description": "Smart file navigation patterns for quickly finding relevant code",
+        "labels": ["general"]
+      }
     ],
     "slash_commands": [
-      { "name": "find", "labels": ["general"] },
-      { "name": "grep-all", "labels": ["general", "debugging"] }
+      {
+        "name": "find",
+        "description": "Powerful file and content search with fuzzy matching support",
+        "labels": ["general"]
+      },
+      {
+        "name": "grep-all",
+        "description": "Search across entire codebase with advanced regex and filters",
+        "labels": ["general", "debugging"]
+      }
     ],
     "workflows": [
-      { "name": "dead-code-finder", "labels": ["refactoring", "code-review"] }
+      {
+        "name": "dead-code-finder",
+        "description": "Identifies and reports unused code, functions, and variables",
+        "labels": ["refactoring", "code-review"]
+      }
     ]
   }
 }

@@ -32,6 +32,7 @@ export type ComponentLabel = (typeof COMPONENT_LABELS)[number];
 // Component entry in manifest (can be string for backwards compat or object with metadata)
 export interface ComponentEntry {
   name: string;
+  description?: string;
   labels?: string[];
 }
 
