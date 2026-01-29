@@ -4,11 +4,25 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": ["readme-generator", "changelog-writer"],
-    "hooks": ["commit-message-enhancer"],
-    "mcp_servers": ["template-server"],
-    "skills": ["writing-guidelines"],
-    "slash_commands": ["generate", "scaffold"],
-    "workflows": ["project-setup"]
+    "agents": [
+      { "name": "readme-generator", "labels": ["documentation", "code-generation"] },
+      { "name": "changelog-writer", "labels": ["documentation", "devops"] }
+    ],
+    "hooks": [
+      { "name": "commit-message-enhancer", "labels": ["devops", "documentation"] }
+    ],
+    "mcp_servers": [
+      { "name": "template-server", "labels": ["code-generation", "architecture"] }
+    ],
+    "skills": [
+      { "name": "writing-guidelines", "labels": ["documentation"] }
+    ],
+    "slash_commands": [
+      { "name": "generate", "labels": ["code-generation"] },
+      { "name": "scaffold", "labels": ["code-generation", "architecture"] }
+    ],
+    "workflows": [
+      { "name": "project-setup", "labels": ["devops", "architecture", "code-generation"] }
+    ]
   }
 }

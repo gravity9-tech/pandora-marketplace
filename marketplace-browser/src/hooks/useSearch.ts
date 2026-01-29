@@ -18,7 +18,7 @@ const fuseOptions: IFuseOptions<FlatComponent> = {
 
 export function useSearch() {
   const { data: flatComponents, isLoading, error } = useFlatComponents();
-  const { searchQuery, types, teams } = useFilterStore();
+  const { searchQuery, types, teams, labels } = useFilterStore();
 
   // Create Fuse index
   const fuse = useMemo(() => {
@@ -39,6 +39,11 @@ export function useSearch() {
       filtered = filtered.filter((c) => teams.includes(c.teamName));
     }
 
+    // Apply label filters (component must have at least one of the selected labels)
+    if (labels.length > 0) {
+      filtered = filtered.filter((c) => c.labels.some((label) => labels.includes(label)));
+    }
+
     // Apply search query
     if (searchQuery.trim()) {
       // Create a new Fuse instance with the filtered data
@@ -48,7 +53,7 @@ export function useSearch() {
     }
 
     return filtered;
-  }, [flatComponents, searchQuery, types, teams, fuse]);
+  }, [flatComponents, searchQuery, types, teams, labels, fuse]);
 
   return {
     results,

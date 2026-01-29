@@ -7,6 +7,37 @@ export type ComponentType =
   | 'mcp_server'
   | 'workflow';
 
+// Available component labels for filtering
+export const COMPONENT_LABELS = [
+  'general',
+  'frontend',
+  'backend',
+  'devops',
+  'data',
+  'security',
+  'testing',
+  'mobile',
+  'architecture',
+  'documentation',
+  'ai-ml',
+  'code-generation',
+  'code-review',
+  'debugging',
+  'monitoring',
+  'refactoring',
+] as const;
+
+export type ComponentLabel = (typeof COMPONENT_LABELS)[number];
+
+// Component entry in manifest (can be string for backwards compat or object with metadata)
+export interface ComponentEntry {
+  name: string;
+  labels?: string[];
+}
+
+// Helper type for manifest component arrays
+export type ManifestComponentList = (string | ComponentEntry)[];
+
 // Community index structure
 export interface CommunityIndex {
   name: string;
@@ -22,12 +53,12 @@ export interface TeamManifest {
   version: string;
   maintainers: string[];
   components: {
-    agents: string[];
-    hooks: string[];
-    mcp_servers: string[];
-    skills: string[];
-    slash_commands: string[];
-    workflows: string[];
+    agents: ManifestComponentList;
+    hooks: ManifestComponentList;
+    mcp_servers: ManifestComponentList;
+    skills: ManifestComponentList;
+    slash_commands: ManifestComponentList;
+    workflows: ManifestComponentList;
   };
 }
 
@@ -71,11 +102,13 @@ export interface FlatComponent {
   type: ComponentType;
   teamName: string;
   path: string;
+  labels: string[];
 }
 
 // Filter state
 export interface FilterState {
   types: ComponentType[];
   teams: string[];
+  labels: string[];
   searchQuery: string;
 }

@@ -10,12 +10,13 @@ import {
   Link as LinkIcon,
   Server,
   Workflow,
+  Download,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTeamManifests } from '@/hooks/useMarketplace';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { ComponentType, TeamManifest } from '@/types/marketplace';
+import type { ComponentType, TeamManifest, ManifestComponentList, ComponentEntry } from '@/types/marketplace';
 import { buildComponentPath } from '@/lib/paths';
 
 // Component type icons
@@ -217,9 +218,14 @@ function TeamTreeItem({ manifest, isExpanded, onToggle, onNavigate, currentPath 
 interface ComponentGroupProps {
   type: ComponentType;
   teamName: string;
-  components: string[];
+  components: ManifestComponentList;
   currentPath: string;
   onNavigate?: () => void;
+}
+
+// Helper to get component name from entry (supports both string and object format)
+function getComponentName(entry: string | ComponentEntry): string {
+  return typeof entry === 'string' ? entry : entry.name;
 }
 
 function ComponentGroup({
@@ -257,7 +263,8 @@ function ComponentGroup({
 
       {isExpanded && (
         <div className="ml-4 mt-0.5 space-y-0.5">
-          {components.map((componentName) => {
+          {components.map((entry) => {
+            const componentName = getComponentName(entry);
             const fullPath = buildComponentPath(teamName, type, componentName);
             const encodedPath = encodeURIComponent(fullPath);
             const linkPath = `/component/${encodedPath}`;
@@ -279,6 +286,14 @@ function ComponentGroup({
               </Link>
             );
           })}
+          <Link
+            to={`/install/${teamName}/${type}`}
+            onClick={onNavigate}
+            className="flex items-center gap-1 px-2 py-1 text-xs rounded-md text-blue-500 hover:bg-accent hover:text-blue-400"
+          >
+            <Download className="h-3 w-3" />
+            Install All
+          </Link>
         </div>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,10 +21,17 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ className }: FilterPanelProps) {
-  const { types, teams: selectedTeams, toggleType, toggleTeam, clearFilters } = useFilterStore();
-  const { teams: allTeams } = useFlatComponents();
+  const { types, teams: selectedTeams, labels: selectedLabels, toggleType, toggleTeam, toggleLabel, clearFilters } = useFilterStore();
+  const { teams: allTeams, data: flatComponents } = useFlatComponents();
 
-  const hasFilters = types.length > 0 || selectedTeams.length > 0;
+  // Get unique labels from all components
+  const allLabels = useMemo(() => {
+    const labelSet = new Set<string>();
+    flatComponents.forEach((c) => c.labels.forEach((l) => labelSet.add(l)));
+    return Array.from(labelSet).sort();
+  }, [flatComponents]);
+
+  const hasFilters = types.length > 0 || selectedTeams.length > 0 || selectedLabels.length > 0;
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -61,6 +69,24 @@ export function FilterPanel({ className }: FilterPanelProps) {
         </div>
       )}
 
+      {/* Label filters */}
+      {allLabels.length > 0 && (
+        <div>
+          <h3 className="text-sm font-medium mb-2">Category</h3>
+          <div className="flex flex-wrap gap-2">
+            {allLabels.map((label) => (
+              <FilterChip
+                key={label}
+                label={label}
+                isSelected={selectedLabels.includes(label)}
+                onClick={() => toggleLabel(label)}
+                variant="label"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Clear filters */}
       {hasFilters && (
         <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground">
@@ -76,10 +102,14 @@ interface FilterChipProps {
   label: string;
   isSelected: boolean;
   onClick: () => void;
-  variant?: ComponentType | 'team';
+  variant?: ComponentType | 'team' | 'label';
 }
 
 function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
+  // Map 'label' variant to a badge-compatible variant for the Badge component
+  const isLabelVariant = variant === 'label';
+  const badgeVariant = isLabelVariant ? 'secondary' : variant;
+
   return (
     <button
       onClick={onClick}
@@ -93,10 +123,11 @@ function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
       )}
     >
       <Badge
-        variant={isSelected ? variant : 'secondary'}
+        variant={isSelected ? badgeVariant as ComponentType | 'team' | undefined : 'secondary'}
         className={cn(
           'border-0',
-          !isSelected && 'bg-transparent text-inherit'
+          !isSelected && 'bg-transparent text-inherit',
+          isLabelVariant && isSelected && 'bg-violet-500/20 text-violet-600 dark:text-violet-400'
         )}
       >
         {label}
@@ -107,9 +138,9 @@ function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
 
 // Compact inline filter display
 export function ActiveFilters({ className }: { className?: string }) {
-  const { types, teams: selectedTeams, toggleType, toggleTeam, clearFilters } = useFilterStore();
+  const { types, teams: selectedTeams, labels: selectedLabels, toggleType, toggleTeam, toggleLabel, clearFilters } = useFilterStore();
 
-  const hasFilters = types.length > 0 || selectedTeams.length > 0;
+  const hasFilters = types.length > 0 || selectedTeams.length > 0 || selectedLabels.length > 0;
 
   if (!hasFilters) return null;
 
@@ -137,6 +168,18 @@ export function ActiveFilters({ className }: { className?: string }) {
           onClick={() => toggleType(type)}
         >
           {type.replace('_', ' ')}
+          <X className="h-3 w-3" />
+        </Badge>
+      ))}
+
+      {selectedLabels.map((label) => (
+        <Badge
+          key={label}
+          variant="secondary"
+          className="cursor-pointer gap-1 bg-violet-500/20 text-violet-600 dark:text-violet-400"
+          onClick={() => toggleLabel(label)}
+        >
+          {label}
           <X className="h-3 w-3" />
         </Badge>
       ))}

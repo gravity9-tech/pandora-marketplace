@@ -1,7 +1,18 @@
 import { useQuery, useQueries } from '@tanstack/react-query';
 import { fetchCommunityIndex, fetchTeamManifest } from '@/api/github';
-import type { TeamManifest, FlatComponent, ComponentType } from '@/types/marketplace';
+import type { TeamManifest, FlatComponent, ComponentType, ComponentEntry } from '@/types/marketplace';
 import { buildComponentPath } from '@/lib/paths';
+
+// Helper to normalize component entries (supports both string and object format)
+function normalizeComponentEntry(entry: string | ComponentEntry): { name: string; labels: string[] } {
+  if (typeof entry === 'string') {
+    return { name: entry, labels: ['general'] };
+  }
+  return {
+    name: entry.name,
+    labels: entry.labels && entry.labels.length > 0 ? entry.labels : ['general'],
+  };
+}
 
 // Query key for community index
 export const communityIndexQueryKey = ['community-index'] as const;
@@ -68,7 +79,8 @@ export function useFlatComponents() {
       for (const { key, type } of componentTypes) {
         const components = manifest.components[key] || [];
 
-        for (const componentName of components) {
+        for (const entry of components) {
+          const { name: componentName, labels } = normalizeComponentEntry(entry);
           const path = buildComponentPath(teamName, type, componentName);
 
           flatComponents.push({
@@ -78,6 +90,7 @@ export function useFlatComponents() {
             type,
             teamName,
             path,
+            labels,
           });
         }
       }

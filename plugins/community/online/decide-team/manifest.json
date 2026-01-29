@@ -4,11 +4,25 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": ["code-review", "unit-test"],
-    "hooks": ["pre-commit-check"],
-    "mcp_servers": ["decision-logger"],
-    "skills": ["code-analysis"],
-    "slash_commands": ["review", "test"],
-    "workflows": ["pr-review"]
+    "agents": [
+      { "name": "code-review", "labels": ["backend", "code-review", "testing"] },
+      { "name": "unit-test", "labels": ["testing", "backend"] }
+    ],
+    "hooks": [
+      { "name": "pre-commit-check", "labels": ["devops", "code-review"] }
+    ],
+    "mcp_servers": [
+      { "name": "decision-logger", "labels": ["monitoring", "debugging"] }
+    ],
+    "skills": [
+      { "name": "code-analysis", "labels": ["code-review", "architecture"] }
+    ],
+    "slash_commands": [
+      { "name": "review", "labels": ["code-review"] },
+      { "name": "test", "labels": ["testing"] }
+    ],
+    "workflows": [
+      { "name": "pr-review", "labels": ["code-review", "devops"] }
+    ]
   }
 }

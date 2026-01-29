@@ -4,11 +4,26 @@
   "version": "1.0.0",
   "maintainers": [],
   "components": {
-    "agents": ["codebase-explorer", "dependency-finder"],
-    "hooks": ["unused-import-detector"],
-    "mcp_servers": ["search-indexer"],
-    "skills": ["regex-patterns", "file-navigation"],
-    "slash_commands": ["find", "grep-all"],
-    "workflows": ["dead-code-finder"]
+    "agents": [
+      { "name": "codebase-explorer", "labels": ["architecture", "debugging"] },
+      { "name": "dependency-finder", "labels": ["devops", "security"] }
+    ],
+    "hooks": [
+      { "name": "unused-import-detector", "labels": ["refactoring", "frontend", "backend"] }
+    ],
+    "mcp_servers": [
+      { "name": "search-indexer", "labels": ["data", "backend"] }
+    ],
+    "skills": [
+      { "name": "regex-patterns", "labels": ["general"] },
+      { "name": "file-navigation", "labels": ["general"] }
+    ],
+    "slash_commands": [
+      { "name": "find", "labels": ["general"] },
+      { "name": "grep-all", "labels": ["general", "debugging"] }
+    ],
+    "workflows": [
+      { "name": "dead-code-finder", "labels": ["refactoring", "code-review"] }
+    ]
   }
 }

@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { BrowsePage } from '@/pages/BrowsePage';
 import { ComponentPage } from '@/pages/ComponentPage';
+import { InstallPage } from '@/pages/InstallPage';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/browse" element={<BrowsePage />} />
             <Route path="/component/:path" element={<ComponentPage />} />
+            <Route path="/install/:team/:type" element={<InstallPage />} />
           </Routes>
         </Layout>
       </HashRouter>
