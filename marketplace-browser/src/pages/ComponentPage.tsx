@@ -3,7 +3,7 @@ import { ArrowLeft, Bot, Lightbulb, Terminal, Link as LinkIcon, Server, Workflow
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CopyPathInline } from '@/components/detail/CopyPathButton';
+import { CopyPathInline, DownloadButton } from '@/components/detail/CopyPathButton';
 import { FrontmatterDisplay } from '@/components/detail/FrontmatterDisplay';
 import { MarkdownViewer } from '@/components/detail/MarkdownViewer';
 import { useComponent } from '@/hooks/useComponent';
@@ -106,16 +106,33 @@ export function ComponentPage() {
         </CardContent>
       </Card>
 
-      {/* Install Command Card */}
+      {/* Install Options Card */}
       <Card className="mb-6">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Install Command</CardTitle>
+          <CardTitle className="text-sm font-medium">Install Options</CardTitle>
         </CardHeader>
-        <CardContent>
-          <CopyPathInline path={component.path} />
-          <p className="text-xs text-muted-foreground mt-3">
-            Run this command in Claude Code to install the component
-          </p>
+        <CardContent className="space-y-4">
+          {/* Claude Code CLI option */}
+          <div>
+            <p className="text-xs text-muted-foreground mb-2">
+              For Claude Code CLI users:
+            </p>
+            <CopyPathInline path={component.path} />
+          </div>
+
+          {/* Browser Claude option */}
+          <div className="pt-2 border-t">
+            <p className="text-xs text-muted-foreground mb-2">
+              For browser-based Claude users (claude.ai):
+            </p>
+            <DownloadButton
+              path={component.path}
+              componentName={componentName}
+            />
+            <p className="text-xs text-muted-foreground mt-2">
+              Download the file and upload it to your Claude project knowledge
+            </p>
+          </div>
         </CardContent>
       </Card>
 
