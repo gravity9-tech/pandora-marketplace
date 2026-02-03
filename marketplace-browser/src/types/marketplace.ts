@@ -109,7 +109,6 @@ export interface FlatComponent {
 // Filter state
 export interface FilterState {
   types: ComponentType[];
-  teams: string[];
   labels: string[];
   searchQuery: string;
 }

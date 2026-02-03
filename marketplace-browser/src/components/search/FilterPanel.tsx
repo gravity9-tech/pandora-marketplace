@@ -21,8 +21,8 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ className }: FilterPanelProps) {
-  const { types, teams: selectedTeams, labels: selectedLabels, toggleType, toggleTeam, toggleLabel, clearFilters } = useFilterStore();
-  const { teams: allTeams, data: flatComponents } = useFlatComponents();
+  const { types, labels: selectedLabels, toggleType, toggleLabel, clearFilters } = useFilterStore();
+  const { data: flatComponents } = useFlatComponents();
 
   // Get unique labels from all components
   const allLabels = useMemo(() => {
@@ -31,7 +31,7 @@ export function FilterPanel({ className }: FilterPanelProps) {
     return Array.from(labelSet).sort();
   }, [flatComponents]);
 
-  const hasFilters = types.length > 0 || selectedTeams.length > 0 || selectedLabels.length > 0;
+  const hasFilters = types.length > 0 || selectedLabels.length > 0;
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -50,24 +50,6 @@ export function FilterPanel({ className }: FilterPanelProps) {
           ))}
         </div>
       </div>
-
-      {/* Team filters */}
-      {allTeams.length > 0 && (
-        <div>
-          <h3 className="text-sm font-medium mb-2">Team</h3>
-          <div className="flex flex-wrap gap-2">
-            {allTeams.map((team) => (
-              <FilterChip
-                key={team}
-                label={team}
-                isSelected={selectedTeams.includes(team)}
-                onClick={() => toggleTeam(team)}
-                variant="team"
-              />
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Label filters */}
       {allLabels.length > 0 && (
@@ -102,7 +84,7 @@ interface FilterChipProps {
   label: string;
   isSelected: boolean;
   onClick: () => void;
-  variant?: ComponentType | 'team' | 'label';
+  variant?: ComponentType | 'label';
 }
 
 function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
@@ -123,7 +105,7 @@ function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
       )}
     >
       <Badge
-        variant={isSelected ? badgeVariant as ComponentType | 'team' | undefined : 'secondary'}
+        variant={isSelected ? badgeVariant as ComponentType | undefined : 'secondary'}
         className={cn(
           'border-0',
           !isSelected && 'bg-transparent text-inherit',
@@ -138,27 +120,15 @@ function FilterChip({ label, isSelected, onClick, variant }: FilterChipProps) {
 
 // Compact inline filter display
 export function ActiveFilters({ className }: { className?: string }) {
-  const { types, teams: selectedTeams, labels: selectedLabels, toggleType, toggleTeam, toggleLabel, clearFilters } = useFilterStore();
+  const { types, labels: selectedLabels, toggleType, toggleLabel, clearFilters } = useFilterStore();
 
-  const hasFilters = types.length > 0 || selectedTeams.length > 0 || selectedLabels.length > 0;
+  const hasFilters = types.length > 0 || selectedLabels.length > 0;
 
   if (!hasFilters) return null;
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
       <span className="text-sm text-muted-foreground">Filters:</span>
-
-      {selectedTeams.map((team) => (
-        <Badge
-          key={team}
-          variant="team"
-          className="cursor-pointer gap-1"
-          onClick={() => toggleTeam(team)}
-        >
-          {team}
-          <X className="h-3 w-3" />
-        </Badge>
-      ))}
 
       {types.map((type) => (
         <Badge

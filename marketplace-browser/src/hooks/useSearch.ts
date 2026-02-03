@@ -7,9 +7,8 @@ import type { FlatComponent } from '@/types/marketplace';
 // Fuse.js options for fuzzy search
 const fuseOptions: IFuseOptions<FlatComponent> = {
   keys: [
-    { name: 'name', weight: 0.5 },
-    { name: 'description', weight: 0.3 },
-    { name: 'teamName', weight: 0.2 },
+    { name: 'name', weight: 0.6 },
+    { name: 'description', weight: 0.4 },
   ],
   threshold: 0.4, // Lower = more strict matching
   includeScore: true,
@@ -18,7 +17,7 @@ const fuseOptions: IFuseOptions<FlatComponent> = {
 
 export function useSearch() {
   const { data: flatComponents, isLoading, error } = useFlatComponents();
-  const { searchQuery, types, teams, labels } = useFilterStore();
+  const { searchQuery, types, labels } = useFilterStore();
 
   // Create Fuse index
   const fuse = useMemo(() => {
@@ -32,11 +31,6 @@ export function useSearch() {
     // Apply type filters
     if (types.length > 0) {
       filtered = filtered.filter((c) => types.includes(c.type));
-    }
-
-    // Apply team filters
-    if (teams.length > 0) {
-      filtered = filtered.filter((c) => teams.includes(c.teamName));
     }
 
     // Apply label filters (component must have at least one of the selected labels)
@@ -53,7 +47,7 @@ export function useSearch() {
     }
 
     return filtered;
-  }, [flatComponents, searchQuery, types, teams, labels, fuse]);
+  }, [flatComponents, searchQuery, types, labels, fuse]);
 
   return {
     results,

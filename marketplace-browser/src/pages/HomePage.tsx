@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Users, Bot, Terminal, Lightbulb, Server, Link as LinkIcon, Workflow } from 'lucide-react';
+import { ArrowRight, Bot, Terminal, Lightbulb, Server, Link as LinkIcon, Workflow, Package } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useCommunityStats, useTeamManifests } from '@/hooks/useMarketplace';
+import { useCommunityStats } from '@/hooks/useMarketplace';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import type { TeamManifest } from '@/types/marketplace';
 
 export function HomePage() {
-  const { data: stats, isLoading: statsLoading } = useCommunityStats();
-  const { data: manifests, teams, isLoading: teamsLoading } = useTeamManifests();
-
-  const isLoading = statsLoading || teamsLoading;
+  const { data: stats, isLoading } = useCommunityStats();
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -20,8 +15,8 @@ export function HomePage() {
           Pandora Community Hub
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-          Discover and install community-contributed agents, commands, and skills for Claude Code.
-          Browse teams and copy component paths for local installation.
+          Discover and install community-contributed agents, commands, skills, and more for Claude Code.
+          Browse components and copy paths for local installation.
         </p>
         <div className="flex justify-center gap-4">
           <Link
@@ -52,11 +47,6 @@ export function HomePage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-4 mb-12">
           <StatCard
-            title="Teams"
-            value={stats?.totalTeams || 0}
-            icon={<Users className="h-4 w-4" />}
-          />
-          <StatCard
             title="Agents"
             value={stats?.byType.agent || 0}
             icon={<Bot className="h-4 w-4" />}
@@ -67,9 +57,14 @@ export function HomePage() {
             icon={<Terminal className="h-4 w-4" />}
           />
           <StatCard
+            title="Skills"
+            value={stats?.byType.skill || 0}
+            icon={<Lightbulb className="h-4 w-4" />}
+          />
+          <StatCard
             title="Total Components"
             value={stats?.totalComponents || 0}
-            icon={<Lightbulb className="h-4 w-4" />}
+            icon={<Package className="h-4 w-4" />}
           />
         </div>
       )}
@@ -138,29 +133,6 @@ export function HomePage() {
         </CardContent>
       </Card>
 
-      {/* Teams */}
-      <section>
-        <div className="border-l-4 border-l-green-500 pl-4 mb-4">
-          <h2 className="text-2xl font-bold">Community Teams</h2>
-          <p className="text-muted-foreground">Browse components by team</p>
-        </div>
-
-        {isLoading ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-32" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {teams.map((teamName) => {
-              const manifest = manifests.get(teamName);
-              if (!manifest) return null;
-              return <TeamCard key={teamName} manifest={manifest} />;
-            })}
-          </div>
-        )}
-      </section>
     </div>
   );
 }
@@ -215,48 +187,3 @@ function TypeCard({
   );
 }
 
-function TeamCard({ manifest }: { manifest: TeamManifest }) {
-  const totalComponents =
-    (manifest.components.agents?.length || 0) +
-    (manifest.components.slash_commands?.length || 0) +
-    (manifest.components.skills?.length || 0) +
-    (manifest.components.hooks?.length || 0) +
-    (manifest.components.mcp_servers?.length || 0) +
-    (manifest.components.workflows?.length || 0);
-
-  return (
-    <Link to={`/browse?team=${manifest.team}`}>
-      <Card className="border-l-4 border-l-green-500 hover:shadow-md transition-shadow h-full">
-        <CardHeader className="pb-2">
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-green-600" />
-            <CardTitle className="text-lg">{manifest.team}</CardTitle>
-          </div>
-          <CardDescription className="line-clamp-2">{manifest.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-1.5">
-            {(manifest.components.agents?.length || 0) > 0 && (
-              <Badge variant="agent" className="text-xs">
-                {manifest.components.agents?.length} agent{(manifest.components.agents?.length || 0) > 1 ? 's' : ''}
-              </Badge>
-            )}
-            {(manifest.components.slash_commands?.length || 0) > 0 && (
-              <Badge variant="slash_command" className="text-xs">
-                {manifest.components.slash_commands?.length} command{(manifest.components.slash_commands?.length || 0) > 1 ? 's' : ''}
-              </Badge>
-            )}
-            {(manifest.components.skills?.length || 0) > 0 && (
-              <Badge variant="skill" className="text-xs">
-                {manifest.components.skills?.length} skill{(manifest.components.skills?.length || 0) > 1 ? 's' : ''}
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            {totalComponents} component{totalComponents !== 1 ? 's' : ''}
-          </p>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-}

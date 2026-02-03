@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Copy, Check, Download, Loader2 } from 'lucide-react';
+import { Copy, Check, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getGitHubRawUrl } from '@/lib/paths';
 
 // Convert full path to install command format
 // e.g., "plugins/community/online/decide-team/agents/hello-world.md" -> "/pandora:install decide-team/agents/hello-world"
@@ -99,50 +98,61 @@ export function CopyPathInline({ path, className }: { path: string; className?: 
 interface DownloadButtonProps {
   path: string;
   componentName: string;
+  content: string;
+  frontmatter?: Record<string, unknown>;
   className?: string;
   variant?: 'default' | 'outline' | 'secondary' | 'ghost';
+}
+
+// Reconstruct full markdown file from frontmatter and content
+function reconstructMarkdown(frontmatter: Record<string, unknown> | undefined, content: string): string {
+  if (!frontmatter || Object.keys(frontmatter).length === 0) {
+    return content;
+  }
+
+  // Convert frontmatter to YAML
+  const yamlLines: string[] = [];
+  for (const [key, value] of Object.entries(frontmatter)) {
+    if (Array.isArray(value)) {
+      yamlLines.push(`${key}:`);
+      value.forEach(item => yamlLines.push(`  - ${item}`));
+    } else if (typeof value === 'object' && value !== null) {
+      yamlLines.push(`${key}: ${JSON.stringify(value)}`);
+    } else {
+      yamlLines.push(`${key}: ${value}`);
+    }
+  }
+
+  return `---\n${yamlLines.join('\n')}\n---\n${content}`;
 }
 
 export function DownloadButton({
   path,
   componentName,
+  content,
+  frontmatter,
   className,
   variant = 'outline',
 }: DownloadButtonProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
+  const handleDownload = () => {
+    // Reconstruct full markdown with frontmatter
+    const fullContent = reconstructMarkdown(frontmatter, content);
 
-  const handleDownload = async () => {
-    setIsDownloading(true);
-    try {
-      const url = getGitHubRawUrl(path);
-      const response = await fetch(url);
+    // Create blob and download
+    const blob = new Blob([fullContent], { type: 'text/markdown' });
+    const downloadUrl = URL.createObjectURL(blob);
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch component');
-      }
+    // Extract filename from path or use componentName
+    const filename = path.split('/').pop() || `${componentName}.md`;
 
-      const content = await response.text();
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-      // Create blob and download
-      const blob = new Blob([content], { type: 'text/markdown' });
-      const downloadUrl = URL.createObjectURL(blob);
-
-      // Extract filename from path or use componentName
-      const filename = path.split('/').pop() || `${componentName}.md`;
-
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      URL.revokeObjectURL(downloadUrl);
-    } catch (err) {
-      console.error('Failed to download:', err);
-    } finally {
-      setIsDownloading(false);
-    }
+    URL.revokeObjectURL(downloadUrl);
   };
 
   return (
@@ -150,20 +160,10 @@ export function DownloadButton({
       variant={variant}
       size="sm"
       onClick={handleDownload}
-      disabled={isDownloading}
       className={cn('gap-2', className)}
     >
-      {isDownloading ? (
-        <>
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Downloading...</span>
-        </>
-      ) : (
-        <>
-          <Download className="h-4 w-4" />
-          <span>Download</span>
-        </>
-      )}
+      <Download className="h-4 w-4" />
+      <span>Download</span>
     </Button>
   );
 }

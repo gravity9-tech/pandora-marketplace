@@ -10,21 +10,17 @@ import type { ComponentType } from '@/types/marketplace';
 
 export function BrowsePage() {
   const [searchParams] = useSearchParams();
-  const { setTypes, setTeams } = useFilterStore();
+  const { setTypes } = useFilterStore();
   const { results, totalCount, filteredCount, isLoading } = useSearch();
 
   // Apply URL params as filters on mount
   useEffect(() => {
     const typeParam = searchParams.get('type');
-    const teamParam = searchParams.get('team');
 
     if (typeParam) {
       setTypes([typeParam as ComponentType]);
     }
-    if (teamParam) {
-      setTeams([teamParam]);
-    }
-  }, [searchParams, setTypes, setTeams]);
+  }, [searchParams, setTypes]);
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl">

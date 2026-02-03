@@ -128,6 +128,8 @@ export function ComponentPage() {
             <DownloadButton
               path={component.path}
               componentName={componentName}
+              content={component.content}
+              frontmatter={component.frontmatter}
             />
             <p className="text-xs text-muted-foreground mt-2">
               Download the file and upload it to your Claude project knowledge
